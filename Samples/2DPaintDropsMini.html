@@ -1,0 +1,124 @@
+﻿<!DOCTYPE html>
+<html>
+<!-- Copyright 2016 Kenichiro Tanaka -->
+<head>
+    <meta charset="UTF-8">
+    <style>
+        #canvas {
+            width: 800px; height: 500px;
+            background-image:url(images/background/wall0.png);
+        }
+        #palette {
+            width: 800px;
+            background-image:url(images/bg_palette.png);
+        }
+        button.color {
+            background-color:transparent;
+        }
+    </style>
+    <script src="Tiny2D.js"></script>
+    <script>
+        "use strict";
+        var engine, ctx, pos0, pos1, ball, count = 0;
+        var color = "#FF0000";
+        var colors = ["#FF0000", "#FF4000", "#FFC926", "#238C00",
+            "#0080FF", "#A300D9", "#FF4DFF", "#FFFFFF"];
+
+        function rand(v) {
+            return Math.floor(Math.random() * v);
+        }
+
+        function init() {
+            engine = new Engine(0, 0, 800, 500, 0, 9.8);
+            ball = document.getElementById("ball");
+
+            var palette = document.getElementById("palette");
+            for (var i = 0 ; i < 8 ; i++) {
+                var button = document.createElement("button");
+                button.className = "color";
+                button.id = "b" + i;
+                button.onclick = function (e) {
+                    var id = e.target.id;
+                    var index = id.charAt(1);
+                    color = colors[index];
+                }
+                var img = document.createElement("img");
+                img.id = "c" + i;
+                img.src = "images/button/color" + i + ".png";
+
+                button.appendChild(img);
+                palette.appendChild(button);
+            }
+
+            var canvas = document.getElementById("canvas");
+            ctx = canvas.getContext("2d");
+            ctx.lineWidth = 5;
+            ctx.lineCap = "round";
+
+            canvas.onmousedown = function (e) {
+                pos0 = { x: e.offsetX, y: e.offsetY };
+            }
+
+            canvas.onmousemove = function (e) {
+                pos1 = { x: e.offsetX, y: e.offsetY };
+            }
+
+            canvas.onmouseup = function (e) {
+                if (pos0) {
+                    var r = new LineEntity(pos0.x, pos0.y, e.offsetX, e.offsetY);
+                    r.color = color;
+                    engine.entities.push(r);
+                    pos0 = null;
+                }
+            }
+
+            setInterval(tick, 50);
+        }
+
+        function tick() {
+            if (count++ % 100 == 0) {
+                var r = new CircleEntity(rand(400) + 50, 0, 20, BodyDynamic);
+                r.color = "blue";
+                engine.entities.push(r);
+            }
+
+            engine.step(0.01);
+            repaint();
+        }
+
+        function drawLine(x0, y0, x1, y1) {
+            ctx.beginPath();
+            ctx.moveTo(x0, y0);
+            ctx.lineTo(x1, y1);
+            ctx.stroke();
+        }
+
+        function repaint() {
+            ctx.clearRect(0, 0, 800, 500);
+            for (var i = 0 ; i < engine.entities.length; i++) {
+                var e = engine.entities[i];
+                ctx.fillStyle = e.color;
+                ctx.strokeStyle = e.color;
+                switch (e.shape) {
+                    case ShapeCircle:
+                        ctx.drawImage(ball, e.x - e.radius, e.y - e.radius,
+                            e.radius * 2, e.radius * 2);
+                        break;
+                    case ShapeLine:
+                        drawLine(e.x0, e.y0, e.x1, e.y1);
+                        break;
+                }
+            }
+            if (pos0 && pos1) {
+                ctx.strokeStyle = color;
+                drawLine(pos0.x, pos0.y, pos1.x, pos1.y);
+            }
+        }
+    </script>
+</head>
+<body onload="init()">
+    <div id="palette"></div>
+    <canvas id="canvas" width="800" height="500"></canvas>
+    <img id="ball" src="ball.png" style="display:none" />
+</body>
+</html>

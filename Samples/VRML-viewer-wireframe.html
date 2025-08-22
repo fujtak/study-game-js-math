@@ -1,0 +1,123 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>VRML Viewer - wireframe</title>
+    <script>
+        "use strict";
+        var ctx, width = 600, height = 600;
+        var vertices = [], polygons = [], cameraZ = 1000;
+
+        function Vec3(x, y, z) {
+            this.x = x;
+            this.y = y;
+            this.z = z;
+        }
+
+        function init() {
+            ctx = document.getElementById("viewer").getContext("2d");
+            document.getElementById("files").onchange = fileSelected;
+        }
+
+        function fileSelected(evt) {
+            var file = evt.target.files[0];
+            var reader = new FileReader();
+            reader.onload = function () {
+                var src = reader.result;
+                var points = parseVRML(src, "point");
+                vertices = createVertices(points);
+                autoScale(vertices);
+
+                var indices = parseVRML(src, "coordIndex");
+                polygons = createPolygons(indices);
+                paint();
+            }
+            reader.readAsText(file);
+        }
+
+        function createVertices(points) {
+            var result = [];
+            for (var i = 0 ; i < points.length ; i += 3) {
+                var x = parseFloat(points[i + 0]);
+                var y = parseFloat(points[i + 1]);
+                var z = parseFloat(points[i + 2]);
+                result.push(new Vec3(x, y, z));
+            }
+            return result;
+        }
+
+        function createPolygons(indices) {
+            var result = [], temp = [];
+            for (var i = 0 ; i < indices.length ; i++) {
+                if (indices[i] < 0) {
+                    result.push(temp)
+                    temp = [];
+                } else {
+                    temp.push(indices[i]);
+                }
+            }
+            return result;
+        }
+
+        function paint() {
+            ctx.fillStyle = "black";
+            ctx.fillRect(0, 0, width, height);
+            ctx.strokeStyle = "white";
+
+            for (var i = 0 ; i < polygons.length ; i++) {
+                ctx.beginPath();
+                var indices = polygons[i];
+                for (var j = 0 ; j < indices.length ; j++) {
+                    var index = indices[j]
+                    var p = vertices[index];
+                    var z = p.z + cameraZ;
+                    var x = p.x * 500 / z + width / 2;
+                    var y = -p.y * 500 / z + height / 2;
+                    if (j == 0) {
+                        ctx.moveTo(x, y)
+                    } else {
+                        ctx.lineTo(x, y)
+                    }
+                }
+                ctx.stroke();
+            }
+        }
+
+        function autoScale(points) {
+            var maxDist = 0;
+            for (var i = 0 ; i < points.length ; i++) {
+                var x = points[i].x;
+                var y = points[i].y;
+                var z = points[i].z;
+                var dist = Math.sqrt(x * x + y * y + z * z);
+                if (dist > maxDist) {
+                    maxDist = dist;
+                }
+            }
+            var scale = width / maxDist;
+            for (var i = 0 ; i < points.length ; i++) {
+                points[i].x *= scale;
+                points[i].y *= scale;
+                points[i].z *= scale;
+            }
+        }
+
+        function parseVRML(str, node) {
+            var posNode = str.indexOf(node);
+            var posStart = str.indexOf("[", posNode);
+            var posEnd = str.indexOf("]", posNode);
+            var posStr = str.substring(posStart + 1, posEnd).trim();
+            var points = posStr.split(/[\s,]+/);
+            var result = [];
+            for (var i = 0 ; i < points.length ; i ++) {
+                result.push(parseFloat(points[i]));
+            }
+            return result;
+        }
+    </script>
+</head>
+<body onload="init()">
+    <input id="files" type="file"/>
+    <canvas id="viewer" width="600" height="600" style="width:600px; height:600px"></canvas>
+</body>
+</html>

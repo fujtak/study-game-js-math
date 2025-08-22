@@ -1,0 +1,62 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Image Processing</title>
+    <script>
+        var ctx, src, img;
+
+        function init() {
+            var canvas = document.getElementById("field");
+            ctx = canvas.getContext("2d");
+
+            var pic = document.getElementById("picture");
+            ctx.drawImage(pic, 0, 0, 250, 250);
+
+            src = ctx.getImageData(0, 0, 250, 250);
+            img = ctx.createImageData(250, 250);
+
+            processImage();
+            paint();
+        }
+
+        function processImage() {
+            for (var y = 0 ; y < 250 ; y += 10) {
+                for (var x = 0 ; x < 250 ; x += 10) {
+
+                    var rTotal = 0, gTotal = 0, bTotal = 0;
+                    for (var dy = y ; dy < y + 10 ; dy++) {
+                        for (var dx = x ; dx < x + 10 ; dx++) {
+                            var i = (dy * 250 + dx) * 4;
+                            rTotal += src.data[i + 0];
+                            gTotal += src.data[i + 1];
+                            bTotal += src.data[i + 2];
+                        }
+                    }
+
+                    var r = rTotal/100, g = gTotal/100, b = bTotal/100;
+
+                    for (var dy = y ; dy < y + 10 ; dy++) {
+                        for (var dx = x ; dx < x + 10 ; dx++) {
+                            var i = (dy * 250 + dx) * 4;
+                            img.data[i + 0] = r;
+                            img.data[i + 1] = g;
+                            img.data[i + 2] = b;
+                            img.data[i + 3] = 0xff;
+                        }
+                    }
+                }
+            }
+        }
+
+        function paint() {
+            ctx.putImageData(img, 0, 0);
+        }
+
+    </script>
+</head>
+<body onload="init()">
+    <canvas id="field" width="250" height="250"></canvas>
+    <img id="picture" src="picture0.jpg" style="display:none" />
+</body>
+</html>

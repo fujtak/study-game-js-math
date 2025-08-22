@@ -1,0 +1,361 @@
+﻿<!DOCTYPE html>
+<html>
+<!-- Copyright 2016 Kenichiro Tanaka -->
+<head>
+    <meta charset="utf-8" />
+    <title>3D Tank</title>
+    <script>
+        "use strict";
+        var ctx, map, width = 600, height = 600;
+        var keymap = [], shapes = [], shots = [], tanks = [];
+        var cameraTheta = 0, cameraX = 0, cameraZ = 0;
+        var soundEffect;
+
+        function rand(val) { return Math.floor(Math.random() * val - val / 2) }
+
+        function Vec3(x, y, z) {
+            this.x = x;
+            this.y = y;
+            this.z = z;
+        }
+
+        function Model(data) {
+            this.data = data;
+            this.work = [];
+            for (var i = 0 ; i < data.length ; i++) {
+                var r = [], v = data[i];
+                for (var j = 0 ; j < v.length ; j++) {
+                    r.push(new Vec3(v[j].x, v[j].y, v[j].z));
+                }
+                this.work.push(r);
+            }
+        }
+
+        Model.prototype.init = function () {
+            for (var i = 0 ; i < this.work.length ; i++) {
+                var w = this.work[i];
+                var d = this.data[i];
+                for (var j = 0 ; j < w.length ; j++) {
+                    w[j].x = d[j].x;
+                    w[j].y = d[j].y;
+                    w[j].z = d[j].z;
+                }
+            }
+        }
+
+        Model.prototype.iter = function (f) {
+            for (var i = 0 ; i < this.work.length ; i++) {
+                var v = this.work[i];
+                for (var j = 0 ; j < v.length ; j++) {
+                    f(v[j]);
+                }
+            }
+        }
+
+        Model.prototype.apply = function (m) {
+            this.iter(function (v) {
+                var x = m[0] * v.x + m[1] * v.y + m[2] * v.z;
+                var y = m[3] * v.x + m[4] * v.y + m[5] * v.z;
+                var z = m[6] * v.x + m[7] * v.y + m[8] * v.z;
+                v.x = x;
+                v.y = y;
+                v.z = z;
+            })
+        }
+
+        Model.prototype.translate = function (x,y,z) {
+            this.iter(function (v) {
+                v.x = v.x + x;
+                v.y = v.y + y;
+                v.z = v.z + z;
+            })
+        }
+
+        function createMatrixY(radian) {
+            var c = Math.cos(radian);
+            var s = Math.sin(radian);
+            return [c, 0, s, 0, 1, 0, -s, 0, c];
+        }
+
+        function Shot(x, z, dir) {
+            this.x = x;
+            this.z = z;
+            this.dx = -Math.sin(dir) * 5;
+            this.dz = Math.cos(dir) * 5;
+            this.count = 0;
+            this.model = new Model([[
+                new Vec3(x, -5, z),
+                new Vec3(x + this.dx, -5, z + this.dz)]
+            ]);
+            this.update = function () {
+                this.model.init();
+                this.count++;
+                this.model.translate(this.dx * this.count, 0, this.dz * this.count);
+            }
+            this.isValid = function () {
+                return (this.count < 30);
+            }
+            this.getX = function () { return this.x + this.dx * this.count; }
+            this.getZ = function () { return this.z + this.dz * this.count; }
+        }
+
+        function Tile() {
+            var polygon = [];
+            for (var x = -200 ; x < 200 ; x += 10) {
+                for (var z = -200 ; z < 200 ; z += 10) {
+                    polygon.push([
+                        new Vec3(x, -5, z),
+                        new Vec3(x + 10, -5, z),
+                        new Vec3(x + 10, -5, z + 10),
+                        new Vec3(x, -5, z + 10),
+                    ]);
+                }
+            }
+            this.model = new Model(polygon);
+            this.update = function () { this.model.init(); }
+            this.getColor = function () { return "#FF0000"; }
+        }
+
+        function Tank() {
+            var v = [
+                new Vec3(-10, -5, -5),
+                new Vec3(-10, -5, +5),
+                new Vec3(10, -5, 0),
+                new Vec3(-8, 2, 0)
+            ];
+            var polygon = [
+                [v[0], v[1], v[2]],
+                [v[0], v[1], v[3]],
+                [v[1], v[2], v[3]],
+                [v[2], v[0], v[3]]
+            ];
+            this.model = new Model(polygon);
+            this.valid = true;
+
+            this.setDestination = function (x, z, t) {
+                this.x = x || rand(400);
+                this.z = z || rand(400);
+                this.t = t || 0
+                this.nx = rand(400);
+                this.nz = rand(400);
+                this.nt = -Math.atan2(this.nz - this.z, this.nx - this.x);
+                this.count = 0;
+                this.rotating = true;
+                this.matrix = createMatrixY(this.nt);
+            }
+
+            this.getX = function () {
+                return this.x + (this.rotating ?
+                    0 : (this.nx - this.x) * this.count / 100);
+            }
+            this.getZ = function () {
+                return this.z + (this.rotating ?
+                    0 : (this.nz - this.z) * this.count / 100);
+            }
+
+            this.getColor = function () { return "#00FF00"; }
+            this.isValid = function () { return this.valid; }
+            this.update = function () {
+                this.model.init();
+                this.count++;
+
+                if (this.rotating) {
+                    var dir = (this.nt - this.t) * this.count / 20 + this.t;
+                    this.matrix = createMatrixY(dir);
+                    if (this.count > 20) {
+                        this.rotating = false;
+                        this.count = 0;
+                    }
+                }
+
+                this.model.apply(this.matrix);
+                this.model.translate(this.getX(), 0, this.getZ())
+
+                if (this.count > 100) {
+                    this.setDestination(this.nx, this.nz, this.nt);
+                }
+
+                for (var i = 0 ; i < shots.length ; i++) {
+                    var dx = Math.abs(this.getX() - shots[i].getX());
+                    var dz = Math.abs(-this.getZ() + shots[i].getZ());
+                    if (dx < 10 && dz < 10) {
+                        shapes.push(new Bang(this));
+                        this.valid = false;
+                        addTank();
+                        soundEffect.play();
+                    }
+                }
+            }
+            
+            this.setDestination();
+        }
+
+
+        function Bang(tank) {
+            var w0 = tank.model.work[0][0];
+            var w1 = tank.model.work[0][1];
+            var w2 = tank.model.work[0][2];
+            var w3 = tank.model.work[1][2];
+            var polygon = [
+                [new Vec3(w0.x, w0.y, w0.z), new Vec3(w1.x, w1.y, w1.z)],
+                [new Vec3(w1.x, w1.y, w1.z), new Vec3(w2.x, w2.y, w2.z)],
+                [new Vec3(w2.x, w2.y, w2.z), new Vec3(w0.x, w0.y, w0.z)],
+                [new Vec3(w0.x, w0.y, w0.z), new Vec3(w3.x, w3.y, w3.z)],
+                [new Vec3(w1.x, w1.y, w1.z), new Vec3(w3.x, w3.y, w3.z)],
+                [new Vec3(w2.x, w2.y, w2.z), new Vec3(w3.x, w3.y, w3.z)],
+            ]
+            this.model = new Model(polygon);
+            this.count = 0;
+            this.colors = [];
+            for (var i = 15 ; i >= 0 ; i--) {
+                this.colors.push("#0" + i.toString(16) +"0");
+            }
+
+            this.r = []
+            for (var i = 0 ; i < 12 ; i++) {
+                this.r.push(new Vec3(rand(20), rand(20), rand(20)));
+            }
+
+            this.update = function () {
+                this.model.init();
+                this.count++;
+                var index = 0;
+                for (var i = 0 ; i < this.model.work.length ; i++) {
+                    var v = this.model.work[i];
+                    for (var j = 0 ; j < v.length ; j++) {
+                        v[j].x += (this.r[index].x) * this.count / 16;
+                        v[j].y += (this.r[index].y) * this.count / 16;
+                        v[j].z += (this.r[index].z) * this.count / 16;
+                        index++;
+                    }
+                }
+            }
+            this.isValid = function () { return this.count < 16; }
+            this.getColor = function () { return this.colors[this.count]; }
+        }
+
+        var proto = {
+            setCamera: function (cameraX, cameraZ, cameraMatrix) {
+                this.model.translate(-cameraX, 0, -cameraZ);
+                this.model.apply(cameraMatrix);
+            },
+            isValid: function () { return true; },
+            getColor: function () { return "#FFFFFF"; }
+        }
+
+        Tile.prototype = proto;
+        Shot.prototype = proto;
+        Tank.prototype = proto;
+        Bang.prototype = proto;
+
+        function init() {
+            ctx = document.getElementById("field").getContext("2d");
+            map = document.getElementById("map").getContext("2d");
+            shapes.push(new Tile());
+            for (var i = 0 ; i < 4 ; i++) {
+                addTank();
+            }
+
+            soundEffect = new Audio("glass.mp3");
+            onkeydown = function (e) { keymap[e.keyCode] = true; }
+            onkeyup = function (e) { keymap[e.keyCode] = false; }
+            setInterval(tick, 100)
+            paint();
+        }
+
+        function tick() {
+            if (keymap[37]) { cameraTheta += 0.1; } // left
+            if (keymap[39]) { cameraTheta -= 0.1; } // right
+            if (keymap[38]) {    // up
+                cameraX -= Math.sin(cameraTheta) * 3;
+                cameraZ += Math.cos(cameraTheta) * 3;
+            }
+            if (keymap[40]) {    // down
+                cameraX += Math.sin(cameraTheta) * 3;
+                cameraZ -= Math.cos(cameraTheta) * 3;
+            }
+            if (keymap[32]) {
+                keymap[32] = false;
+                var shot = new Shot(cameraX, cameraZ, cameraTheta);
+                shots.push(shot);
+                shapes.push(shot);
+            }
+
+            var cameraMatrix = createMatrixY(cameraTheta);
+            for (var i = 0 ; i < shapes.length ; i++) {
+                shapes[i].update();
+                shapes[i].setCamera(cameraX, cameraZ, cameraMatrix);
+            }
+
+            shapes = shapes.filter(function (s) { return s.isValid() });
+            shots = shots.filter(function (s) { return s.isValid() });
+            tanks = tanks.filter(function (t) { return t.isValid() })
+
+            paint();
+        }
+
+        function addTank() {
+            var tank = new Tank();
+            tanks.push(tank);
+            shapes.push(tank);
+        }
+
+        function paint() {
+            ctx.fillStyle = "black";
+            ctx.fillRect(0, 0, width, height);
+            ctx.strokeStyle = "white";
+
+            for (var i = 0 ; i < shapes.length ; i++) {
+                var polygon = shapes[i].model.work;
+                ctx.strokeStyle = shapes[i].getColor();
+                for (var j = 0 ; j < polygon.length ; j++) {
+                    ctx.beginPath();
+
+                    var vertices = polygon[j];
+                    for (var k = 0 ; k < vertices.length ; k++) {
+                        var p = vertices[k];
+                        if (p.z < 0) continue;
+                        var x = p.x / p.z * 1000 + 300;
+                        var y = -p.y / p.z * 1000 + 300;
+
+                        if (k == 0) {
+                            ctx.moveTo(x, y)
+                        } else {
+                            ctx.lineTo(x, y)
+                        }
+                    }
+                    ctx.stroke();
+                }
+            }
+
+            map.fillStyle = "black";
+            map.fillRect(0, 0, width, height);
+            map.fillStyle = "blue";
+            map.save();
+            map.translate(150, 150);
+            map.scale(3 / 4, - 3 / 4);
+            map.fillRect(cameraX, cameraZ, 5, 5);
+            map.globalAlpha = 0.6;
+            map.beginPath();
+            map.moveTo(cameraX, cameraZ);
+            map.arc(cameraX, cameraZ, 300,
+                cameraTheta + Math.PI / 2 - 0.4,
+                cameraTheta + Math.PI / 2 + 0.4);
+            map.fill();
+            map.fillStyle = "lightgreen";
+            for (var i = 0 ; i < tanks.length ; i++) {
+                map.fillRect(tanks[i].getX(), tanks[i].getZ(), 7, 7);
+            }
+            map.fillStyle = "white";
+            for (var i = 0 ; i < shots.length ; i++) {
+                map.fillRect(shots[i].getX(), shots[i].getZ(), 5, 5);
+            }
+            map.restore();
+        }
+    </script>
+</head>
+<body onload="init()">
+    <canvas id="field" width="600" height="600" style="width:600px; height:600px"></canvas>
+    <canvas id="map" width="300" height="300" style="width:300px; height:300px"></canvas>
+</body>
+</html>

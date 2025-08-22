@@ -1,0 +1,54 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Image Processing</title>
+    <script>
+        var ctx, src, img;
+
+        function init() {
+            var canvas = document.getElementById("field");
+            ctx = canvas.getContext("2d");
+
+            var pic = document.getElementById("picture");
+            ctx.drawImage(pic, 0, 0, 250, 250);
+
+            src = ctx.getImageData(0, 0, 250, 250);
+            img = ctx.createImageData(250, 250);
+
+            processImage();
+            paint();
+        }
+
+        function processImage() {
+            var nWaves = 4;
+            var radius = 10;
+            var waveFreq = (nWaves * Math.PI * 2) / 250;
+
+            for (var x = 0 ; x < 250 ; x++) {
+                var yOffset = Math.floor(Math.sin(x * waveFreq) * radius);
+
+                for (var y = 0 ; y < 250 ; y++) {
+                    var i = (y * 250 + x) * 4;
+                    var s = ((y + yOffset) * 250 + x) * 4;
+                    if (y + yOffset >= 0 && y + yOffset < 250) {
+                        img.data[i + 0] = src.data[s + 0];    // R
+                        img.data[i + 1] = src.data[s + 1];    // G
+                        img.data[i + 2] = src.data[s + 2];    // B
+                    }
+                    img.data[i + 3] = 0xff;
+                }
+            }
+        }
+
+        function paint() {
+            ctx.putImageData(img, 0, 0);
+        }
+
+    </script>
+</head>
+<body onload="init()">
+    <canvas id="field" width="250" height="250"></canvas>
+    <img id="picture" src="picture0.jpg" style="display:none" />
+</body>
+</html>

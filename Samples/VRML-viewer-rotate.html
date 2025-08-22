@@ -1,0 +1,172 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>VRML Viewer - rotate</title>
+    <script>
+        "use strict";
+        var ctx, width = 600, height = 600;
+        var vertices = [], polygons = [], cameraZ = 1000;
+        var matrix, timer;
+
+        function Vec3(x, y, z) {
+            this.x = x;
+            this.y = y;
+            this.z = z;
+        }
+
+        function Matrix3D() {
+            this.matrix = [1, 0, 0, 0, 1, 0, 0, 0, 1];
+
+            this.rotateY = function (theta) {
+                theta *= (Math.PI / 180);
+                var c = Math.cos(theta), s = Math.sin(theta);
+                var m = this.matrix, r = [];
+                r[0] = m[0] * c - m[2] * s;
+                r[1] = m[1];
+                r[2] = m[0] * s + m[2] * c;
+                r[3] = m[3] * c - m[5] * s;
+                r[4] = m[4];
+                r[5] = m[3] * s + m[5] * c;
+                r[6] = m[6] * c - m[8] * s;
+                r[7] = m[7];
+                r[8] = m[6] * s + m[8] * c;
+                this.matrix = r;
+            }
+
+            this.apply = function(points){
+                var m = this.matrix;
+                var r = [];
+                for (var i = 0 ; i < points.length ; i++) {
+                    var p = points[i];
+                    var x = m[0] * p.x + m[1] * p.y + m[2] * p.z;
+                    var y = m[3] * p.x + m[4] * p.y + m[5] * p.z;
+                    var z = m[6] * p.x + m[7] * p.y + m[8] * p.z;
+                    p.x = x;
+                    p.y = y;
+                    p.z = z;
+                }
+            }
+        }
+
+        function init() {
+            ctx = document.getElementById("viewer").getContext("2d");
+            document.getElementById("files").onchange = fileSelected;
+            matrix = new Matrix3D();
+            matrix.rotateY(5);
+
+            setInterval(tick, 100);
+        }
+
+        function tick() {
+            if (vertices) {
+                matrix.apply(vertices);
+                paint();
+            }
+        }
+
+        function fileSelected(evt) {
+            var file = evt.target.files[0];
+            var reader = new FileReader();
+            reader.onload = function () {
+                var src = reader.result;
+                var points = parseVRML(src, "point");
+                vertices = createVertices(points);
+                autoScale(vertices);
+
+                var indices = parseVRML(src, "coordIndex");
+                polygons = createPolygons(indices);
+            }
+            reader.readAsText(file);
+        }
+
+        function createVertices(points) {
+            var result = [];
+            for (var i = 0 ; i < points.length ; i += 3) {
+                var x = parseFloat(points[i + 0]);
+                var y = parseFloat(points[i + 1]);
+                var z = parseFloat(points[i + 2]);
+                result.push(new Vec3(x, y, z));
+            }
+            return result;
+        }
+
+        function createPolygons(indices) {
+            var result = [], temp = [];
+            for (var i = 0 ; i < indices.length ; i++) {
+                if (indices[i] < 0) {
+                    result.push(temp)
+                    temp = [];
+                } else {
+                    temp.push(indices[i]);
+                }
+            }
+            return result;
+        }
+
+        function paint() {
+            if (!vertices) {
+                return;
+            }
+
+            ctx.fillStyle = "black";
+            ctx.fillRect(0, 0, width, height);
+            ctx.strokeStyle = "white";
+
+            for (var i = 0 ; i < polygons.length ; i++) {
+                ctx.beginPath();
+                var indices = polygons[i];
+                for (var j = 0 ; j < indices.length ; j++) {
+                    var index = indices[j]
+                    var p = vertices[index];
+                    var z = p.z + cameraZ;
+                    var x = p.x * 500 / z + width / 2;
+                    var y = -p.y * 500 / z + height / 2;
+                    if (j == 0) {
+                        ctx.moveTo(x, y)
+                    } else {
+                        ctx.lineTo(x, y)
+                    }
+                }
+                ctx.stroke();
+            }
+        }
+
+        function autoScale(points) {
+            var maxDist = 0;
+            for (var i = 0 ; i < points.length ; i++) {
+                var x = points[i].x;
+                var y = points[i].y;
+                var z = points[i].z;
+                var dist = Math.sqrt(x * x + y * y + z * z);
+                if (dist > maxDist) {
+                    maxDist = dist;
+                }
+            }
+            var scale = width / maxDist;
+            for (var i = 0 ; i < points.length ; i++) {
+                points[i].x *= scale;
+                points[i].y *= scale;
+                points[i].z *= scale;
+            }
+        }
+
+        function parseVRML(str, node) {
+            var posNode = str.indexOf(node);
+            var posStart = str.indexOf("[", posNode);
+            var posEnd = str.indexOf("]", posNode);
+            var posStr = str.substring(posStart + 1, posEnd).trim();
+            var points = posStr.split(/[\s,]+/);
+            var result = [];
+            for (var i = 0 ; i < points.length ; i ++) {
+                result.push(parseFloat(points[i]));
+            }
+            return result;
+        }
+    </script>
+</head>
+<body onload="init()">
+    <input id="files" type="file"/>
+    <canvas id="viewer" width="600" height="600" style="width:600px; height:600px"></canvas>
+</body>
+</html>
