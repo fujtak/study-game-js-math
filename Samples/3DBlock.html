@@ -1,0 +1,190 @@
+﻿<!DOCTYPE html>
+<html>
+<!-- Copyright 2016 Kenichiro Tanaka -->
+<head>
+    <meta charset="utf-8" />
+    <title>3D Block</title>
+    <script>
+        "use strict";
+        var ctx, timer, keymap = [], blocks = [], paddle, ball;
+        var speed = 5, message = "";
+        var theta = 260 + Math.floor(Math.random() * 20);
+
+        function deg2rad(val) { return Math.PI * val / 180; }
+
+        function Cube(x, y, z, w, h, d, color) {
+            this.x = x;
+            this.y = y;
+            this.w = w;
+            this.h = h;
+            this.pos = []
+            this.color = color;
+
+            this.vertices = [
+                { x: x - w, y: y - h, z: z + d },
+                { x: x - w, y: y + h, z: z + d },
+                { x: x + w, y: y + h, z: z + d },
+                { x: x + w, y: y - h, z: z + d },
+                { x: x - w, y: y - h, z: z - d },
+                { x: x - w, y: y + h, z: z - d },
+                { x: x + w, y: y + h, z: z - d },
+                { x: x + w, y: y - h, z: z - d },
+            ];
+            
+            this.polygons = [
+                [2, 1, 5, 6],
+                [0, 1, 2, 3],
+                [4, 5, 1, 0],
+                [2, 6, 7, 3],
+                [7, 6, 5, 4],
+                [0, 3, 7, 4]
+            ];
+
+            this.rotateXY = function (radX, radY) {
+                for (var i = 0 ; i < this.vertices.length ; i++) {
+                    var c = this.vertices[i];
+                    var x = c.x, y = c.y, z = c.z;
+
+                    // rotation around X axis
+                    var p = x;
+                    var q = y * Math.cos(radX) 
+                        - z * Math.sin(radX);
+                    var r = y * Math.sin(radX) 
+                        + z * Math.cos(radX);
+
+                    // rotation around Y axis
+                    var x = p * Math.cos(radY) 
+                        + r * Math.sin(radY);
+                    var y = q;
+                    var z = -p * Math.sin(radY) 
+                        + r * Math.cos(radY);
+                    this.pos[i] = { x: x, y: y, z: z };
+                }
+            };
+
+            this.ishit = function (x, y) {
+                return this.x - this.w < x && x < this.x + this.w &&
+                    this.y - this.h < y && y < this.y + this.h;
+            };
+
+            this.translate = function (dx, dy) {
+                this.x += dx;
+                this.y += dy;
+
+                for (var i = 0 ; i < this.vertices.length ; i++) {
+                    this.vertices[i].x += dx;
+                    this.vertices[i].y += dy;
+                }
+            };
+        }
+
+        function init() {
+            ctx = document.getElementById("field").getContext("2d");
+            ctx.font = "20pt Arial";
+
+            var colors = ['red', 'orange', 'yellow', 
+                          'green', 'purple', 'blue'];
+            for (var y = 0 ; y < colors.length ; y++) {
+                for (var x = -3 ; x < 4 ; x++) {
+                    var b = new Cube(x * 70, y * 50 + 450, 0,
+                        30, 10, 5, colors[y]);
+                    blocks.push(b);
+                }
+            }
+            paddle = new Cube(0, 0, 0, 30, 10, 5, "white");
+            blocks.push(paddle);
+
+            ball = new Cube(0, 400, 0, 5, 5, 5, "yellow");
+            blocks.push(ball);
+
+            onkeydown = function (e) { keymap[e.keyCode] = true; }
+            onkeyup = function (e) { keymap[e.keyCode] = false; }
+            timer = setInterval(tick, 20)
+        }
+
+        function tick() {
+            if (keymap[37]) { if (paddle.x > -250) paddle.translate(-5, 0) }
+            if (keymap[39]) { if (paddle.x < +250) paddle.translate(5, 0) }
+
+            // tilt 
+            var radY = paddle.x / 1000;
+            var radX = 0.5 + ball.y / 2000;
+            blocks.forEach(function (b) { b.rotateXY(radX, radY) });
+
+            // move ball
+            var dx = Math.cos(deg2rad(theta)) * speed;
+            var dy = Math.sin(deg2rad(theta)) * speed;
+            ball.translate(dx, dy);
+
+            var count = blocks.length;
+            blocks = blocks.filter(function (b) {
+                return b == ball || b == paddle || !b.ishit(ball.x, ball.y);
+            });
+            if (blocks.length != count) {
+                theta = -theta;
+            }
+            if (blocks.length == 2) {
+                stop("CLEARED")
+            }
+
+            if (ball.y > 800) {                     // hit ceiling?
+                theta = -theta;
+                speed = 10;
+            }
+            if (ball.y < -1200) {
+                stop("GAME OVER");
+            }
+            if (ball.x < -250 || ball.x > 250) {    // hit left, right?
+                theta = 180 - theta;
+            }
+            if (paddle.ishit(ball.x, ball.y)) {
+                theta = 90 + ((paddle.x - ball.x) / paddle.w) * 80;
+            }
+
+            paint();
+        }
+
+        function stop(str) {
+            message = str;
+            clearInterval(timer);
+            timer = NaN;
+        }
+
+        function paint() {
+            // clear background
+            ctx.fillStyle = "black";
+            ctx.fillRect(0, 0, 600, 600);
+
+            // draw blocks
+            blocks.forEach(function (b) {
+                ctx.strokeStyle = b.color;
+                ctx.beginPath();
+                for (var i = 0 ; i < b.polygons.length ; i++) {
+                    for (var j = 0 ; j < 4 ; j++) {
+                        var index = b.polygons[i][j];
+                        var v = b.pos[index];
+                        var x = v.x / (v.z + 500) * 500 + 300;
+                        var y = -v.y / (v.z + 500) * 500 + 500;
+                        if (j == 0) {
+                            ctx.moveTo(x, y);
+                        } else {
+                            ctx.lineTo(x, y);
+                        }
+                    }
+                    ctx.closePath();
+                    ctx.stroke();
+                }
+            })
+
+            if (isNaN(timer)) {
+                ctx.fillStyle = "yellow";
+                ctx.fillText(message, 220, 250);
+            }
+        }
+    </script>
+</head>
+<body onload="init()">
+    <canvas id="field" width="600" height="600" 
+            style="width:600px; height:600px"></canvas>
+</body>
+</html>

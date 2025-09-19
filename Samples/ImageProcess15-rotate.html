@@ -1,0 +1,60 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Image Processing</title>
+    <script>
+        var ctx, src, img;
+
+        function init() {
+            var canvas = document.getElementById("field");
+            ctx = canvas.getContext("2d");
+
+            var pic = document.getElementById("picture");
+            ctx.drawImage(pic, 0, 0, 250, 250);
+
+            src = ctx.getImageData(0, 0, 250, 250);
+            img = ctx.createImageData(250, 250);
+
+            processImage();
+            paint();
+        }
+
+        function processImage() {
+            var angle = 45;
+            var angleRadian = angle * Math.PI * 2 / 360;
+            var ca = Math.cos(angleRadian);
+            var sa = Math.sin(angleRadian);
+
+            for (var y = 0 ; y < 250 ; y++) {
+                for (var x = 0 ; x < 250 ; x++) {
+
+                    var cy = y - 125;
+                    var cx = x - 125;
+                    var xs = Math.floor((cx * ca - cy * sa) + 125);
+                    var ys = Math.floor((cy * ca + cx * sa) + 125);
+
+                    if (xs >= 0 && xs < 250 && ys >= 0 && ys < 250) {
+                        var i = (y * 250 + x) * 4;
+                        var j = (ys * 250 + xs) * 4;
+
+                        img.data[i + 0] = src.data[j + 0];    // R
+                        img.data[i + 1] = src.data[j + 1];    // G
+                        img.data[i + 2] = src.data[j + 2];    // B
+                        img.data[i + 3] = 0xff;
+                    }
+                }
+            }
+        }
+
+        function paint() {
+            ctx.putImageData(img, 0, 0);
+        }
+        
+    </script>
+</head>
+<body onload="init()">
+    <canvas id="field" width="250" height="250"></canvas>
+    <img id="picture" src="picture0.jpg" style="display:none" />
+</body>
+</html>

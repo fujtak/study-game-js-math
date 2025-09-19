@@ -1,0 +1,47 @@
+﻿<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>Image Processing</title>
+    <script>
+        var ctx, src, img;
+
+        function init() {
+            var canvas = document.getElementById("field");
+            ctx = canvas.getContext("2d");
+
+            var pic = document.getElementById("picture");
+            ctx.drawImage(pic, 0, 0, 250, 250);
+
+            src = ctx.getImageData(0, 0, 250, 250);
+            img = ctx.createImageData(250, 250);
+
+            processImage();
+            paint();
+        }
+
+        function processImage() {
+            for (var i = 0 ; i < 250 * 250 * 4 ; i += 4) {
+                var r = src.data[i + 0];
+                var g = src.data[i + 1];
+                var b = src.data[i + 2];
+                var a = 0xff;
+                var gray = Math.floor((r * 3 + g * 4 + b * 2) / 9);
+
+                img.data[i + 0] = gray;
+                img.data[i + 1] = gray;
+                img.data[i + 2] = gray;
+                img.data[i + 3] = 0xff;
+            }
+        }
+
+        function paint() {
+            ctx.putImageData(img, 0, 0);
+        }
+    </script>
+</head>
+<body onload="init()">
+    <canvas id="field" width="250" height="250"></canvas>
+    <img id="picture" src="picture0.jpg" style="display:none" />
+</body>
+</html>

@@ -1,0 +1,74 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>texture mapping</title>
+    <script>
+        "use strict";
+        var ctx, picture, points=[], W = 250, H = 250;
+
+        function init() {
+            picture = document.getElementById("picture");
+            var canvas = document.getElementById("surface");
+            ctx = canvas.getContext("2d");
+            ctx.fillStyle = "green";
+
+            canvas.onmousedown = function (e) {
+                ctx.beginPath();
+                ctx.arc(e.offsetX, e.offsetY, 2, 0, Math.PI * 2)
+                ctx.fill();
+                points[points.length] = { x: e.offsetX, y: e.offsetY };
+                if (points.length == 4) {
+                    repaint();
+                }
+            }
+        }
+
+        function repaint() {
+            // Clipping
+            ctx.save();
+            ctx.beginPath();
+            ctx.moveTo(points[0].x, points[0].y);
+            ctx.lineTo(points[2].x, points[2].y);
+            ctx.lineTo(points[3].x, points[3].y);
+            ctx.closePath();
+            ctx.clip();
+            // Affine Transform
+            var dx = points[0].x, dy = points[0].y;
+            var sx = (points[3].x - points[0].x) / W;
+            var sy = (points[2].y - points[3].y) / H;
+            var rx = (points[3].y - points[0].y) / W;
+            var ry = (points[2].x - points[3].x) / H;
+            ctx.setTransform(sx, rx, ry, sy, dx, dy);
+            ctx.drawImage(picture, 0, 0, 250, 250);
+            ctx.restore();
+
+            // Clipping
+            ctx.save();
+            ctx.beginPath();
+            ctx.moveTo(points[0].x, points[0].y);
+            ctx.lineTo(points[1].x, points[1].y);
+            ctx.lineTo(points[2].x, points[2].y);
+            ctx.closePath();
+            ctx.clip();
+
+            // Affine Transform
+            dx = points[0].x, dy = points[0].y;
+            sx = (points[2].x - points[1].x) / W;
+            sy = (points[1].y - points[0].y) / H;
+            rx = (points[2].y - points[1].y) / W;
+            ry = (points[1].x - points[0].x) / H;
+            ctx.setTransform(sx, rx, ry, sy, dx, dy);
+            ctx.drawImage(picture, 0, 0, 250, 250);
+            ctx.restore();
+            points = [];
+        }
+    </script>
+</head>
+<body onload="init()">
+    <canvas id="surface" width="600" height="600" 
+            style="height:600px;width:600px;border:1px solid blue;"></canvas>
+    <img id="picture" src="picture0.jpg" style="display:none" />
+</body>
+</html>

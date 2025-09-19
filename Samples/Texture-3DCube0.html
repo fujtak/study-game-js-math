@@ -1,0 +1,116 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>texture mapping</title>
+    <script>
+        "use strict";
+        var ctx, cube, rotX = 0, rotY = 0;
+
+        function Vec3(x, y, z) {
+            this.x = x;
+            this.y = y;
+            this.z = z;
+        }
+
+        function Cube(x, y, z, w, h, d) {
+            this.pos = [];
+
+            this.vertices = [
+                { x: x - w, y: y - h, z: z + d },
+                { x: x - w, y: y + h, z: z + d },
+                { x: x + w, y: y + h, z: z + d },
+                { x: x + w, y: y - h, z: z + d },
+                { x: x - w, y: y - h, z: z - d },
+                { x: x - w, y: y + h, z: z - d },
+                { x: x + w, y: y + h, z: z - d },
+                { x: x + w, y: y - h, z: z - d },
+            ];
+
+            this.polygons = [
+                [2, 1, 5, 6],
+                [0, 1, 2, 3],
+                [4, 5, 1, 0],
+                [2, 6, 7, 3],
+                [7, 6, 5, 4],
+                [0, 3, 7, 4]
+            ];
+
+            this.setCamera = function (cameraX, cameraY, cameraZ, mRotX, mRotY) {
+                for (var i = 0 ; i < this.vertices.length ; i++) {
+                    var c = this.vertices[i];
+
+                    // move the camera
+                    var x = c.x - cameraX;
+                    var y = c.y - cameraY;
+                    var z = c.z;
+
+                    // rotate around Y axis
+                    var p = mRotY[0] * x + mRotY[1] * y + mRotY[2] * z;
+                    var q = mRotY[3] * x + mRotY[4] * y + mRotY[5] * z;
+                    var r = mRotY[6] * x + mRotY[7] * y + mRotY[8] * z;
+
+                    // rotate around X axis
+                    x = mRotX[0] * p + mRotX[1] * q + mRotX[2] * r;
+                    y = mRotX[3] * p + mRotX[4] * q + mRotX[5] * r;
+                    z = mRotX[6] * p + mRotX[7] * q + mRotX[8] * r;
+
+                    this.pos[i] = { x: x, y: y, z: z - cameraZ };
+                }
+            }
+        }
+
+        function init() {
+            var canvas = document.getElementById("viewer");
+            ctx = canvas.getContext("2d");
+            cube = new Cube(0, 0, 0, 50, 50, 50);
+            setInterval(tick, 100);
+        }
+
+        function tick() {
+            rotY += 0.05, rotX += 0.1;
+            var c = Math.cos(rotY);
+            var s = Math.sin(rotY);
+            var MatrixRotY = [c, 0, s, 0, 1, 0, -s, 0, c];
+
+            var c = Math.cos(rotX);
+            var s = Math.sin(rotX);
+            var MatrixRotX = [1, 0, 0, 0, c, -s, 0, s, c];
+            cube.setCamera(0, 0, 1000, MatrixRotX, MatrixRotY)
+            paint();
+        }
+
+        function paint() {
+            // clear background
+            ctx.fillStyle = "black";
+            ctx.fillRect(0, 0, 600, 600);
+
+            ctx.strokeStyle = "green";
+            for (var i = 0 ; i < cube.polygons.length ; i++) {
+                ctx.beginPath();
+                var indices = cube.polygons[i];
+                for (var j = 0 ; j < indices.length ; j++) {
+                    var index = indices[j];
+                    var p = cube.pos[index];
+                    var z = p.z + 500;
+                    var x = p.x * 1000 / z + 300;
+                    var y = -p.y * 1000 / z + 300;
+                    if (j == 0) {
+                        ctx.moveTo(x, y)
+                    } else {
+                        ctx.lineTo(x, y)
+                    }
+                }
+                ctx.closePath();
+                ctx.stroke();
+            }
+        }
+    </script>
+</head>
+<body onload="init()">
+    <canvas id="viewer" width="600" height="600" 
+            style="height:600px;width:600px"></canvas>
+    <img id="picture" src="picture0.jpg" style="display:none" />
+</body>
+</html>

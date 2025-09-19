@@ -1,0 +1,229 @@
+﻿<!DOCTYPE html>
+<html>
+<!-- Copyright 2016 Kenichiro Tanaka -->
+<head>
+    <meta charset="utf-8" />
+    <title>3D Tilt</title>
+    <script src="Tiny2D.js"></script>
+    <script>
+        "use strict";
+        var engine, ctx, keymap = [], cubes = [], ball, ballImg;
+        var light = new Vec3(0.5, -0.8, -0.2).normalize();
+        var rotX = 0, rotY = 0;
+        var map = [
+            { x: 25, y: 300, w: 25, h: 300, near: 0 },    // 0 
+            { x: 575, y: 300, w: 25, h: 300, near: 0 },   // 1
+            { x: 300, y: 25, w: 250, h: 25, near: 1 },    // 2
+            { x: 300, y: 575, w: 250, h: 25, near: 1 },   // 3
+            { x: 250, y: 150, w: 200, h: 25, near: 1 },  // 4
+            { x: 350, y: 300, w: 200, h: 25, near: 1 },  // 5
+            { x: 250, y: 450, w: 200, h: 25, near: 1 },  // 6
+        ];
+
+        function Vec3(x, y, z) {
+            this.x = x;
+            this.y = y;
+            this.z = z;
+            this.normalize = function () {
+                var x = this.x, y = this.y, z = this.z;
+                var scale = 1 / Math.sqrt(x * x + y * y + z * z);
+                this.x *= scale;
+                this.y *= scale;
+                this.z *= scale;
+                return this;
+            }
+        }
+
+        function Surface(vertices, near) {
+            this.pos = vertices;
+            var p1 = vertices[0];
+            var p2 = vertices[1];
+            var p3 = vertices[2];
+            var p4 = vertices[3];
+            var p = new Vec3(p1.x - p2.x, p1.y - p2.y, p1.z - p2.z);
+            var q = new Vec3(p1.x - p3.x, p1.y - p3.y, p1.z - p3.z);
+            var n = new Vec3(
+                p.y * q.z - p.z * q.y,
+                p.z * q.x - p.x * q.z,
+                p.x * q.y - p.y * q.x);
+            this.norm = n.normalize();  // unit normal vector
+            var cX = (p1.x + p2.x + p3.x + p4.x) / 4;
+            var cY = (p1.y + p2.y + p3.y + p4.y) / 4;
+            this.cZ = (p1.z + p2.z + p3.z + p4.z) / 4 + Math.sqrt(cX*cX + cY*cY);
+            if (near) {
+                this.cZ -= 100;
+            }
+        }
+
+        function Cube(x, y, z, w, h, d, near) {
+            this.pos = [];
+            this.near = near;
+            this.vertices = [
+                { x: x - w, y: y - h, z: z + d },
+                { x: x - w, y: y + h, z: z + d },
+                { x: x + w, y: y + h, z: z + d },
+                { x: x + w, y: y - h, z: z + d },
+                { x: x - w, y: y - h, z: z - d },
+                { x: x - w, y: y + h, z: z - d },
+                { x: x + w, y: y + h, z: z - d },
+                { x: x + w, y: y - h, z: z - d },
+            ];
+
+            this.polygons = [
+                [2, 1, 5, 6],
+                [0, 1, 2, 3],
+                [4, 5, 1, 0],
+                [2, 6, 7, 3],
+                [7, 6, 5, 4],
+                [0, 3, 7, 4]
+            ];
+
+            this.getSurfaces = function () {
+                var r = [];
+                for (var i = 0 ; i < this.polygons.length ; i++) {
+                    var indices = this.polygons[i];
+                    var p = [];
+                    for (var j = 0 ; j < indices.length ; j++) {
+                        p.push(this.pos[indices[j]]);
+                    }
+
+                    r.push(new Surface(p, this.near));
+                }
+                return r;
+            };
+
+            this.setCamera = function (cameraX, cameraZ, cameraY, mRotX, mRotY) {
+                for (var i = 0 ; i < this.vertices.length ; i++) {
+                    var c = this.vertices[i];
+
+                    // move the camera
+                    var x = c.x - cameraX;
+                    var y = c.y - cameraY;
+                    var z = c.z;
+
+                    // rotate around Y axis
+                    var p = mRotY[0]*x + mRotY[1]*y + mRotY[2]*z;
+                    var q = mRotY[3]*x + mRotY[4]*y + mRotY[5]*z;
+                    var r = mRotY[6]*x + mRotY[7]*y + mRotY[8]*z;
+
+                    // rotate around X axis
+                    x = mRotX[0]*p + mRotX[1]*q + mRotX[2]*r;
+                    y = mRotX[3]*p + mRotX[4]*q + mRotX[5]*r;
+                    z = mRotX[6]*p + mRotX[7]*q + mRotX[8]*r;
+
+                    z -= cameraZ;
+                    this.pos[i] = { x: x, y: y, z: z };
+                }
+            }
+        }
+
+        function init() {
+            ballImg = document.getElementById("ballImg");
+            ctx = document.getElementById("field").getContext("2d");
+
+            engine = new Engine(0, 0, 600, 600, 0, 0);
+
+            map.forEach(function (c) {
+                cubes.push(new Cube(c.x, c.y, 0, c.w, c.h, 25, c.near));
+                var r = new RectangleEntity(c.x - c.w, c.y - c.h, c.w * 2, c.h * 2);
+                engine.entities.push(r);
+            })
+
+            ball = new CircleEntity(100, 100, 30, BodyDynamic, 0.2);
+            engine.entities.push(ball);
+
+            onkeydown = function (e) { keymap[e.keyCode] = true; };
+            onkeyup = function (e) { keymap[e.keyCode] = false;}
+            setInterval(tick, 25)
+        }
+
+        function tick() {
+            if (keymap[37]) { rotY -= 0.01; }  // left
+            if (keymap[39]) { rotY += 0.01; }  // right
+            if (keymap[38]) { rotX += 0.01; }  // up
+            if (keymap[40]) { rotX -= 0.01; }  // down
+            rotX = Math.max(-0.1, Math.min(0.1, rotX));
+            rotY = Math.max(-0.1, Math.min(0.1, rotY));
+            engine.setGravity(-rotY * 20, rotX * 20);
+            engine.step(0.01);
+
+            var c = Math.cos(rotY);
+            var s = Math.sin(rotY);
+            var MatrixRotY = [c, 0, s, 0, 1, 0, -s, 0, c];
+
+            var c = Math.cos(-rotX);
+            var s = Math.sin(-rotX);
+            var MatrixRotX = [1, 0, 0, 0, c, -s, 0, s, c];
+
+            cubes.forEach(function (b) {
+                b.setCamera(300, -1000, 300, MatrixRotX, MatrixRotY);
+            });
+
+            paint();
+        }
+
+        function paint() {
+            // clear background
+            ctx.fillStyle = "black";
+            ctx.fillRect(0, 0, 600, 600);
+
+            // get all surfaces and sort them
+            var surfaces = []
+            cubes.forEach(function (b) {
+                surfaces = surfaces.concat(b.getSurfaces())
+            });
+            surfaces.sort(function (a, b) {
+                return b.cZ - a.cZ || Math.abs(b.cX) - Math.abs(a.cX);
+            });
+
+            // draw all surfaces
+            surfaces.forEach(function (s) {
+                var p = (s.norm.x * light.x + s.norm.y * light.y + s.norm.z * light.z);
+                var ratio = (p + 1) / 2;    // p: -1 to 1, ratio: 0 to 1
+                ctx.fillStyle = "rgba(" + Math.floor(255 * ratio) + ","
+                    + Math.floor(255 * ratio) + ","
+                    + Math.floor(255 * ratio) + ",255)";
+
+                ctx.beginPath();
+                for (var i = 0 ; i < 4 ; i++) {
+                    var v = s.pos[i];
+                    if (v.z <= 0) continue;
+                    var x = v.x / v.z * 1000 + 300;
+                    var y = -v.y / v.z * 1000 + 300;
+                    if (i == 0) {
+                        ctx.moveTo(x, y);
+                    } else {
+                        ctx.lineTo(x, y);
+                    }
+                }
+                ctx.closePath();
+                ctx.fill();
+            })
+
+            ctx.drawImage(ballImg, ball.x - 30, ball.y - 30, 60, 60);
+
+            /*            
+            ctx.strokeStyle = "yellow";
+            map.forEach(function (c) {
+                ctx.beginPath();
+                ctx.moveTo(c.x - c.w, c.y - c.h);
+                ctx.lineTo(c.x + c.w, c.y - c.h);
+                ctx.lineTo(c.x + c.w, c.y + c.h);
+                ctx.lineTo(c.x - c.w, c.y + c.h);
+                ctx.closePath();
+                ctx.stroke();
+            })
+            ctx.beginPath();
+            ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2);
+            ctx.closePath();
+            ctx.stroke();
+            */
+        }
+    </script>
+</head>
+<body onload="init()">
+    <canvas id="field" width="600" height="600" 
+            style="width:600px; height:600px"></canvas>
+    <img id="ballImg" src="ball.png" style="display:none" />
+</body>
+</html>

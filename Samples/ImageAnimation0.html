@@ -1,0 +1,159 @@
+﻿<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>Image Processing</title>
+    <script>
+        var ip, ctx;
+
+        function ImageProcessor(ctx) {
+            this.ctx = ctx;
+            this.width = ctx.canvas.clientWidth;
+            this.height = ctx.canvas.clientHeight;
+            this.src = ctx.getImageData(0, 0, this.width, this.height);
+            this.pixels = ctx.createImageData(this.width, this.height);
+            this.frames = [];
+
+            // 各種メソッド
+            this.loop = function (f) {
+                for (var y = 0 ; y < this.height ; y++) {
+                    for (var x = 0 ; x < this.width ; x++) {
+                        f(x, y, this.width, this.height);
+                    }
+                }
+            }
+
+            this.reset = function () {
+                var d = this.pixels.data, s = this.src.data;
+                this.loop(function (x, y, w, h) {
+                    var i = (y * w + x) * 4;
+                    d[i + 0] = s[i + 0];
+                    d[i + 1] = s[i + 1];
+                    d[i + 2] = s[i + 2];
+                    d[i + 3] = 0xff;
+                })
+            }
+
+            this.copy = function (d, s) {
+                this.loop(function (x, y, w, h) {
+                    var i = (y * w + x) * 4;
+                    d[i + 0] = s[i + 0];
+                    d[i + 1] = s[i + 1];
+                    d[i + 2] = s[i + 2];
+                    d[i + 3] = 0xff;
+                })
+            }
+
+            this.move = function (xOffset, yOffset, color) {
+                var tmpPixels = this.ctx.createImageData(this.width, this.height);
+                var d = tmpPixels.data, s = this.pixels.data;
+                this.copy(d, s);
+                this.loop(function (x, y, w, h) {
+                    var i = (y * w + x) * 4;
+                    var j = ((y + yOffset) * w + (x + xOffset)) * 4;
+
+                    if (y + yOffset >= 0 && y + yOffset < h &&
+                        x + xOffset >= 0 && x + xOffset < w) {
+                        if (color & 0x1) {
+                            d[i + 0] = s[j + 0];
+                        }
+                        if (color & 0x2) {
+                            d[i + 1] = s[j + 1];
+                        }
+                        if (color & 0x4) {
+                            d[i + 2] = s[j + 2];
+                        }
+                    }
+                })
+                this.pixels = tmpPixels;
+            }
+
+            this.horizontalWave = function (nWaves, percent, offset) {
+                var tmpPixels = this.ctx.createImageData(this.width, this.height);
+                var d = tmpPixels.data, s = this.pixels.data;
+                this.copy(d, s);
+
+                var waveFreq = (nWaves * Math.PI * 2) / this.height;
+                var waveOffset = (offset * nWaves * Math.PI * 2) / 100;
+                var radius = (this.width * percent) / 100;
+
+                this.loop(function (x, y, w, h) {
+                    var xOffset = Math.floor(Math.sin(y * waveFreq + waveOffset) * radius);
+
+                    var i = (y * w + x) * 4;
+                    var j = (y * w + (x + xOffset)) * 4;
+
+                    if (x + xOffset >= 0 && x + xOffset < w) {
+                        d[i + 0] = s[j + 0];
+                        d[i + 1] = s[j + 1];
+                        d[i + 2] = s[j + 2];
+                    }
+                })
+                this.pixels = tmpPixels;
+            }
+
+            this.verticalWave = function (nWaves, percent, offset) {
+                var tmpPixels = this.ctx.createImageData(this.width, this.height);
+                var d = tmpPixels.data, s = this.pixels.data;
+                this.copy(d, s);
+
+                var waveFreq = (nWaves * Math.PI * 2) / this.height;
+                var waveOffset = (offset * nWaves * Math.PI * 2) / 100;
+                var radius = (this.width * percent) / 100;
+
+                this.loop(function (x, y, w, h) {
+                    var yOffset = Math.floor(Math.sin(x * waveFreq + waveOffset) * radius);
+
+                    var i = (y * w + x) * 4;
+                    var j = ((y + yOffset) * w + x) * 4;
+
+                    if (y + yOffset >= 0 && y + yOffset < h) {
+                        d[i + 0] = s[j + 0];
+                        d[i + 1] = s[j + 1];
+                        d[i + 2] = s[j + 2];
+                    }
+                })
+                this.pixels = tmpPixels;
+            }
+            this.snapshot = function () {
+                this.frames.push(this.pixels);
+                this.pixels = ctx.createImageData(this.width, this.height);
+            }
+        }
+
+        function init() {
+            var canvas = document.getElementById("field");
+            ctx = canvas.getContext("2d");
+
+            ctx.fillStyle = "white";
+            ctx.font = "54px 'Times New Roman'"
+            ctx.fillText("JavaScript", 10, 120);
+
+            ip = new ImageProcessor(ctx);
+            for (var i = 0 ; i < 20 ; i++) {
+                var offset = (100 / 10) * i;
+                ip.reset();
+
+                var xOffset = i < 10 ? i : 20 - i;
+                ip.move(xOffset, xOffset, 0x1);
+                ip.move(-xOffset, -xOffset, 0x2);
+                ip.horizontalWave(1, 4, offset);
+                ip.verticalWave(1, 2, offset)
+                ip.snapshot();
+            }
+            setInterval(paint, 100);
+        }
+
+        var i = 0;
+        function paint() {
+            ctx.putImageData(ip.frames[i], 0, 0);
+            i = (i + 1) % ip.frames.length;
+        }
+
+    </script>
+</head>
+<body onload="init()">
+    <canvas id="field" width="250" height="250"></canvas>
+    <img id="picture" src="picture0.jpg" style="display:none" />
+</body>
+</html>

@@ -1,0 +1,53 @@
+﻿@charset "utf-8";
+/* CSS Document */
+
+body{
+	background:url(background.jpg);
+	background-repeat: repeat-y;
+	background-size:cover;
+	padding-top:60px;
+}
+#START {
+    position: absolute;
+    left: 400px;
+    top: 200px;
+}
+#time {
+    width:300px;
+    height:20px;
+    background-color:blue;
+}
+#game{
+	display:inline;
+}
+#main-game,#game-info,#mini-map
+{
+	float:left;
+}
+#mini-map {
+    border: 4px solid #336;
+    margin-left: 10px;
+    padding-bottom:25px;
+    background-color: rgba(230,230,230, 0.5);
+}
+#game-info{
+	width:250px;
+	padding:16px;
+	height:568px;
+	background-color:rgba(230,230,230, 0.7);
+	border:4px solid #036;
+	margin-right:10px;
+	margin-left:10px;
+    font-size:20px;
+}
+#main-game{
+	border:4px solid #336;
+}
+.info {
+    font-weight: bold;
+    margin-left: 10px;
+    font-size: 32px;
+    color: #006;
+    text-shadow: 2px 2px 2px #006699;
+}
+
