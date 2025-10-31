@@ -33,22 +33,22 @@
             ball = document.getElementById("ball");
 
             var palette = document.getElementById("palette");
-            for (var i = 0 ; i < 8 ; i++) {
-                var button = document.createElement("button");
-                button.className = "color";
-                button.id = "b" + i;
-                button.onclick = function (e) {
-                    var id = e.target.id;
-                    var index = id.charAt(1);
-                    color = colors[index];
-                }
-                var img = document.createElement("img");
-                img.id = "c" + i;
-                img.src = "images/button/color" + i + ".png";
+            // for (var i = 0 ; i < 8 ; i++) {
+            //     var button = document.createElement("button");
+            //     button.className = "color";
+            //     button.id = "b" + i;
+            //     button.onclick = function (e) {
+            //         var id = e.target.id;
+            //         var index = id.charAt(1);
+            //         color = colors[index];
+            //     }
+            //     var img = document.createElement("img");
+            //     img.id = "c" + i;
+            //     img.src = "images/button/color" + i + ".png";
 
-                button.appendChild(img);
-                palette.appendChild(button);
-            }
+            //     button.appendChild(img);
+            //     palette.appendChild(button);
+            // }
 
             var canvas = document.getElementById("canvas");
             ctx = canvas.getContext("2d");
