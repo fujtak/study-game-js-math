@@ -1,18 +1,18 @@
-import { Position } from './Position.js'
-import { EntityLine } from './EntityLine.js'
+import { MouseStrokeLine } from "./MouseStrokeLine.js"
 
-const canvas = document.querySelector('canvas')
-const ctx = canvas.getContext('2d')
+const ctx = document.querySelector('canvas').getContext('2d')
+window.ctx = ctx
+
+const mouseStrokeLine = new MouseStrokeLine()
 
 function loop() {
-  paint()
+  draw()
   requestAnimationFrame(loop)
 }
 
-function paint() {
-  ctx.clearRect(0, 0, 800, 500)
-  const line = new EntityLine({ ctx: ctx, start: new Position({ x: 100, y: 100 }), end: new Position({ x: 200, y: 200 })})
-  line.draw()
+function draw() {
+  ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height)
+  mouseStrokeLine.draw()
 }
 
 window.addEventListener('load', loop)

@@ -1,19 +1,18 @@
 class EntityLine {
-  constructor({ ctx, start, end, width, color }) {
-    this.ctx = ctx
+  constructor({ start, end }) {
     this.start = start
     this.end = end
-    this.width = width ?? 1
-    this.color = color ?? 'black'
+    this.width = 1
+    this.color = 'black'
     Object.freeze(this)
   }
   draw() {
-    this.ctx.strokeStyle = this.color
-    this.ctx.lineWidth = this.width
-    this.ctx.beginPath()
-    this.ctx.moveTo(this.start.x, this.start.y)
-    this.ctx.lineTo(this.end.x, this.end.y)
-    this.ctx.stroke()
+    ctx.strokeStyle = this.color
+    ctx.lineWidth = this.width
+    ctx.beginPath()
+    ctx.moveTo(this.start.x, this.start.y)
+    ctx.lineTo(this.end.x, this.end.y)
+    ctx.stroke()
   }
 }
 
