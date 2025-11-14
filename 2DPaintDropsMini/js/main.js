@@ -1,9 +1,9 @@
-import { ListLineStroked } from "./ListLineStroked.js"
+import { LineStrokedList } from "./LineStrokedList.js"
 
 const ctx = document.querySelector('canvas').getContext('2d')
 Object.defineProperty(window, "CONTEXT", { value: ctx })
 
-const listLineStroked = new ListLineStroked()
+const lineStrokedList = new LineStrokedList()
 
 function loop() {
   draw()
@@ -12,7 +12,7 @@ function loop() {
 
 function draw() {
   CONTEXT.clearRect(0, 0, CONTEXT.canvas.width, CONTEXT.canvas.height)
-  listLineStroked.draw()
+  lineStrokedList.draw()
 }
 
 window.addEventListener('load', loop)

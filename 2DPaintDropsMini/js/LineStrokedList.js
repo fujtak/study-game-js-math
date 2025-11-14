@@ -1,7 +1,7 @@
 import { Position } from './Position.js'
 import { LineStroked } from "./LineStroked.js"
 
-class ListLineStroked {
+class LineStrokedList {
   #lines
   #countMousedown
   constructor() {
@@ -34,4 +34,4 @@ class ListLineStroked {
   }
 }
 
-export { ListLineStroked }
+export { LineStrokedList }

@@ -1,11 +1,11 @@
 import { Position } from './Position.js'
-import { EntityLineStroked } from './EntityLineStroked.js'
+import { LineEntityStroked } from './LineEntityStroked.js'
 
 class LineStroked {
   #line
   #boundOnMousemove
   constructor({ start }) {
-    this.#line = new EntityLineStroked({ start })
+    this.#line = new LineEntityStroked({ start })
     this.#boundOnMousemove = this.#onMousemove.bind(this)
     this.#addEventListener()
   }
