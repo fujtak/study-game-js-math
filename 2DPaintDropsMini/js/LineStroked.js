@@ -3,20 +3,24 @@ import { EntityLineStroked } from './EntityLineStroked.js'
 
 class LineStroked {
   #line
-  constructor() {
-    this.#line = null
+  #boundOnMousemove
+  constructor({ start }) {
+    this.#line = new EntityLineStroked({ start })
+    this.#boundOnMousemove = this.#onMousemove.bind(this)
     this.#addEventListener()
   }
-  #set(start) {
-    this.#line = this.#line ? null : new EntityLineStroked({ start })
-  }
-  #update(end) {
-    if(!this.#line) return
-    this.#line = this.#line.update(end)
+  #onMousemove(e) {
+    this.update(new Position({ x: e.offsetX, y: e.offsetY }))
   }
   #addEventListener() {
-    CONTEXT.canvas.addEventListener('mousedown', (e) => this.#set(new Position({ x: e.offsetX, y: e.offsetY })))
-    CONTEXT.canvas.addEventListener('mousemove', (e) => this.#update(new Position({ x: e.offsetX, y: e.offsetY })))
+    CONTEXT.canvas.addEventListener('mousemove', this.#boundOnMousemove)
+  }
+  removeEventListener() {
+    CONTEXT.canvas.removeEventListener('mousemove', this.#boundOnMousemove)
+  }
+  update(end) {
+    if(!this.#line) return
+    this.#line = this.#line.update(end)
   }
   draw() {
     if(!this.#line) return
