@@ -7,12 +7,12 @@ class EntityLine {
     Object.freeze(this)
   }
   draw() {
-    ctx.strokeStyle = this.color
-    ctx.lineWidth = this.width
-    ctx.beginPath()
-    ctx.moveTo(this.start.x, this.start.y)
-    ctx.lineTo(this.end.x, this.end.y)
-    ctx.stroke()
+    CONTEXT.strokeStyle = this.color
+    CONTEXT.lineWidth = this.width
+    CONTEXT.beginPath()
+    CONTEXT.moveTo(this.start.x, this.start.y)
+    CONTEXT.lineTo(this.end.x, this.end.y)
+    CONTEXT.stroke()
   }
 }
 

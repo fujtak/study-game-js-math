@@ -1,5 +1,6 @@
 import { EntityLine } from './EntityLine.js'
 
+// 始点を保持できるEntityLine
 class EntityLineStroked {
   constructor({ start, end }) {
     if(!start) {

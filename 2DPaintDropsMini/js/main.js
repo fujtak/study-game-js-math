@@ -1,9 +1,9 @@
-import { MouseStrokeLine } from "./MouseStrokeLine.js"
+import { LineStroked } from "./LineStroked.js"
 
 const ctx = document.querySelector('canvas').getContext('2d')
-window.ctx = ctx
+Object.defineProperty(window, "CONTEXT", { value: ctx })
 
-const mouseStrokeLine = new MouseStrokeLine()
+const lineStroked = new LineStroked()
 
 function loop() {
   draw()
@@ -11,8 +11,8 @@ function loop() {
 }
 
 function draw() {
-  ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height)
-  mouseStrokeLine.draw()
+  CONTEXT.clearRect(0, 0, CONTEXT.canvas.width, CONTEXT.canvas.height)
+  lineStroked.draw()
 }
 
 window.addEventListener('load', loop)
