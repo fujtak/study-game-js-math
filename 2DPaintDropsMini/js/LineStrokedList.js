@@ -3,10 +3,8 @@ import { LineStroked } from "./LineStroked.js"
 
 class LineStrokedList {
   #lines
-  #countMousedown
   constructor() {
     this.#lines = []
-    this.#countMousedown = 0
     this.#addEventListener()
   }
   get #lineLatest() {
@@ -14,14 +12,13 @@ class LineStrokedList {
   }
   #addEventListener() {
     CONTEXT.canvas.addEventListener('mousedown', this.#onMousedown.bind(this))
+    CONTEXT.canvas.addEventListener('mouseup', this.#onMouseup.bind(this))
   }
   #onMousedown(e) {
-    ++this.#countMousedown
-    if(this.#countMousedown % 2 === 0) {
-      this.#lineLatest.removeEventListener()
-    } else {
-      this.#add(new Position({ x: e.offsetX, y: e.offsetY }))
-    }
+    this.#add(new Position({ x: e.offsetX, y: e.offsetY }))
+  }
+  #onMouseup(e) {
+    this.#lineLatest.removeMousemoveEventListener()
   }
   #add(start) {
     const line = new LineStroked({ start })

@@ -7,15 +7,15 @@ class LineStroked {
   constructor({ start }) {
     this.#line = new LineEntityStroked({ start })
     this.#boundOnMousemove = this.#onMousemove.bind(this)
-    this.#addEventListener()
+    this.#addMousemoveEventListener()
   }
   #onMousemove(e) {
     this.update(new Position({ x: e.offsetX, y: e.offsetY }))
   }
-  #addEventListener() {
+  #addMousemoveEventListener() {
     CONTEXT.canvas.addEventListener('mousemove', this.#boundOnMousemove)
   }
-  removeEventListener() {
+  removeMousemoveEventListener() {
     CONTEXT.canvas.removeEventListener('mousemove', this.#boundOnMousemove)
   }
   update(end) {
