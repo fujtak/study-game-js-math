@@ -1,9 +1,9 @@
 class LineEntity {
-  constructor({ start, end }) {
+  constructor({ start, end, color }) {
     this.start = start
     this.end = end
     this.width = 1
-    this.color = 'black'
+    this.color = color ?? 'black'
     Object.freeze(this)
   }
   draw() {
