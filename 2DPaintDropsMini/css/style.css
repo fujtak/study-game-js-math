@@ -4,7 +4,7 @@ section {
 .p-palette {
   height: 62px;
   display: flex;
-  background-image: url('/2DPaintDropsMini/images/background-palette.png');
+  background-image: url('../images/background-palette.png');
   border: 1px solid black;
 }
 button {
@@ -23,5 +23,5 @@ button img {
   object-fit: contain;
 }
 canvas {
-  background-image: url('/2DPaintDropsMini/images/background-canvas.png');
+  background-image: url('../images/background-canvas.png');
 }
