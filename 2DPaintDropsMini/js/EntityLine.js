@@ -1,4 +1,4 @@
-class LineEntity {
+class EntityLine {
   constructor({ start, end, color }) {
     this.start = start
     this.end = end
@@ -16,4 +16,4 @@ class LineEntity {
   }
 }
 
-export { LineEntity }
+export { EntityLine }

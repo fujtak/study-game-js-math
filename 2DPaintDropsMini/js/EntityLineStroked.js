@@ -1,7 +1,7 @@
-import { LineEntity } from './LineEntity.js'
+import { EntityLine } from './EntityLine.js'
 
-// 始点を保持できるLineEntity
-class LineEntityStroked {
+// 始点を保持できるEntityLine
+class EntityLineStroked {
   constructor({ start, end, color }) {
     if(!start) {
       console.error(`Invarid start: ${start}`)
@@ -13,16 +13,16 @@ class LineEntityStroked {
     Object.freeze(this)
   }
   update(end) {
-    return new LineEntityStroked({
+    return new EntityLineStroked({
       start: this.start,
       end: end,
       color: this.color,
     })
   }
   draw() {
-    const line = new LineEntity({ start: this.start, end: this.end, color: this.color })
+    const line = new EntityLine({ start: this.start, end: this.end, color: this.color })
     line.draw()
   }
 }
 
-export { LineEntityStroked }
+export { EntityLineStroked }
