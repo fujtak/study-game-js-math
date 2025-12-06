@@ -11,10 +11,10 @@ function loop() {
 
 function draw() {
   CONTEXT.clearRect(0, 0, CONTEXT.canvas.width, CONTEXT.canvas.height)
-  const start = new Position(100, 100)
-  const end = new Position(300, 300)
-  const line = new EntityLine(start, end)
+  const line = new EntityLine(new Position(100, 100), new Position(300, 300))
   line.draw()
+  const line2 = new EntityLine(new Position(200, 100), new Position(400, 300))
+  line2.draw()
 }
 
 window.addEventListener('load', loop)
