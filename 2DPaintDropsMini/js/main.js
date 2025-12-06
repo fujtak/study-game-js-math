@@ -1,8 +1,8 @@
 import { EntityLineList } from './EntityLineList.js'
 import { ActionDrag } from './ActionDrag.js'
 
-const ctx = document.querySelector('canvas').getContext('2d')
-Object.defineProperty(window, "CONTEXT", { value: ctx })
+const context = document.querySelector('canvas').getContext('2d')
+Object.defineProperty(window, "CONTEXT", { value: context })
 
 const lines = new EntityLineList()
 const drag = new ActionDrag(lines)
