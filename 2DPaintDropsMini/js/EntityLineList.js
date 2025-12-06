@@ -9,8 +9,14 @@ class EntityLineList {
       new EntityLine(new Position(200, 100), new Position(400, 300)),
     ]
   }
+  get latest() {
+    return this.#lines.at(-1)
+  }
   push(line) {
     this.#lines.push(line)
+  }
+  updateLatest(line) {
+    this.#lines[this.#lines.length-1] = line
   }
   draw() {
     for(const line of this.#lines) {
