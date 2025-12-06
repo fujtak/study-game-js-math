@@ -8,12 +8,13 @@ class ActionLine {
     Object.freeze(this)
   }
   #addEventListener() {
-    CONTEXT.canvas.addEventListener('mousedown', (e) => {
-      const start = new Position(e.offsetX, e.offsetY)
-      const end = new Position(500, 300)
-      const line = new EntityLine(start, end)
-      this.lines.push(line)
-    })
+    CONTEXT.canvas.addEventListener('mousedown', (e) => this.#onMousedown(e))
+  }
+  #onMousedown(e) {
+    const start = new Position(e.offsetX, e.offsetY)
+    const end = new Position(500, 300)
+    const line = new EntityLine(start, end)
+    this.lines.push(line)
   }
 }
 
