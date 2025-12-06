@@ -9,21 +9,21 @@ class ActionDrag {
     Object.freeze(this)
   }
   #addEventListener() {
-    CONTEXT.canvas.addEventListener('mousedown', (e) => this.#onMousedown(e))
-    CONTEXT.canvas.addEventListener('mouseup', () => this.#onMouseup())
-    CONTEXT.canvas.addEventListener('mousemove', (e) => this.#onMousemove(e))
+    CONTEXT.canvas.addEventListener('mousedown', (e) => this.#start(e))
+    CONTEXT.canvas.addEventListener('mouseup', () => this.#end())
+    CONTEXT.canvas.addEventListener('mousemove', (e) => this.#update(e))
   }
-  #onMousedown(e) {
+  #start(e) {
     if(this.dragging.isActive) return
     const start = new Position(e.offsetX, e.offsetY)
     this.dragging.init(start)
   }
-  #onMouseup() {
+  #end() {
     if(!this.dragging.isActive) return
     this.lines.push(this.dragging.line)
     this.dragging.clean()
   }
-  #onMousemove(e) {
+  #update(e) {
     if(!this.dragging.isActive) return
     const end = new Position(e.offsetX, e.offsetY)
     this.dragging.update(end)
