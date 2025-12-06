@@ -1,5 +1,5 @@
 class Position {
-  constructor({ x, y }) {
+  constructor(x, y) {
     if(typeof x !== 'number') {
       console.error(`Invarid x: ${x}`)
       return

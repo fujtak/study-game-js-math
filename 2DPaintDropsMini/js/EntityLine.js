@@ -1,5 +1,5 @@
 class EntityLine {
-  constructor({ start, end, color }) {
+  constructor(start, end, color) {
     this.start = start
     this.end = end
     this.width = 1
