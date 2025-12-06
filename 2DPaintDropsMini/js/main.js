@@ -15,6 +15,7 @@ function loop() {
 function draw() {
   CONTEXT.clearRect(0, 0, CONTEXT.canvas.width, CONTEXT.canvas.height)
   lines.draw()
+  actionLine.draw()
 }
 
 window.addEventListener('load', loop)

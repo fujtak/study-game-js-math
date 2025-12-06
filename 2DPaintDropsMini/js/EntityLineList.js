@@ -15,9 +15,6 @@ class EntityLineList {
   push(line) {
     this.#lines.push(line)
   }
-  updateLatest(line) {
-    this.#lines[this.#lines.length-1] = line
-  }
   draw() {
     for(const line of this.#lines) {
       line.draw()
