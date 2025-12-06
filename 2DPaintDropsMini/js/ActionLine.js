@@ -8,7 +8,7 @@ class ActionLine {
     Object.freeze(this)
   }
   #addEventListener() {
-    CONTEXT.canvas.addEventListener('click', () => {
+    CONTEXT.canvas.addEventListener('mousedown', () => {
       const line = new EntityLine(new Position(300, 100), new Position(500, 300))
       this.lines.push(line)
     })
