@@ -2,7 +2,7 @@ class EntityLine {
   constructor(start, end, color) {
     this.start = start
     this.end = end
-    this.width = 1
+    this.width = 2
     console.log('color', color)
     this.color = color ?? 'black'
     Object.freeze(this)
