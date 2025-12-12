@@ -1,13 +1,13 @@
 class EntityLineList {
+  #lines
   constructor() {
-    this.lines = []
-    Object.freeze(this)
+    this.#lines = []
   }
   push(line) {
-    this.lines.push(line)
+    this.#lines.push(line)
   }
   draw() {
-    for(const line of this.lines) {
+    for(const line of this.#lines) {
       line.draw()
     }
   }
