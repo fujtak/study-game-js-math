@@ -1,10 +1,10 @@
 import { Position } from "./Position.js"
-import { ActionDragLine } from "./ActionDragLine.js"
+import { lineDragger } from "./ActionDragLine.js"
 
 class ActionDrag {
   constructor(lines) {
     this.lines = lines
-    this.dragging = new ActionDragLine()
+    this.dragging = lineDragger
     this.#addEventListener()
     Object.freeze(this)
   }

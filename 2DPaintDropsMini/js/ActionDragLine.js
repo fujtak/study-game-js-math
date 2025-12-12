@@ -30,4 +30,6 @@ class ActionDragLine {
   }
 }
 
-export { ActionDragLine }
+const lineDragger = new ActionDragLine()
+
+export { lineDragger }
