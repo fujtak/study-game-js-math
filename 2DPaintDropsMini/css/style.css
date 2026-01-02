@@ -26,3 +26,6 @@ button img {
 canvas {
   background-image: url('../images/background-canvas.png');
 }
+.ball {
+  display: none;
+}

@@ -1,9 +1,10 @@
 class EntityBall {
   constructor() {
-    console.log('EntityBall')
+    this.element = document.querySelector('[data-ball]')
+    Object.freeze(this)
   }
   draw() {
-    console.log('EntityBall draw') 
+    CONTEXT.drawImage(this.element, 0, 0, 100, 100)
   }
 }
 
