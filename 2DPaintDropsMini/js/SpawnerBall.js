@@ -10,7 +10,8 @@ class SpawnerBall {
     setInterval(this.#spawn.bind(this), 3000)
   }
   #spawn() {
-    this.#balls.push(new EntityBall(0))
+    const x = Math.random() * CONTEXT.canvas.width
+    this.#balls.push(new EntityBall(x))
   }
 }
 
