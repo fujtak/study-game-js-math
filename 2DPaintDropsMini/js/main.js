@@ -10,11 +10,11 @@ const lines = new EntityLineList()
 const drag = new ActionDrag(lines)
 
 function loop() {
-  draw()
+  update()
   requestAnimationFrame(loop)
 }
 
-function draw() {
+function update() {
   CONTEXT.clearRect(0, 0, CONTEXT.canvas.width, CONTEXT.canvas.height)
   ball.draw()
   lines.draw()
