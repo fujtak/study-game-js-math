@@ -1,10 +1,14 @@
+import { Position } from "./Position.js"
+
 class EntityBall {
+  #element
+  #position
   constructor() {
-    this.element = document.querySelector('[data-ball]')
-    Object.freeze(this)
+    this.#element = document.querySelector('[data-ball]')
+    this.#position = new Position(0, 0)
   }
   draw() {
-    CONTEXT.drawImage(this.element, 0, 0, 100, 100)
+    CONTEXT.drawImage(this.#element, this.#position.x, this.#position.y, 40, 40)
   }
 }
 
