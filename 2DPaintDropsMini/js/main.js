@@ -1,4 +1,6 @@
+// Ball
 import { EntityBallList } from './EntityBallList.js'
+// Line
 import { EntityLineList } from './EntityLineList.js'
 import { ActionDrag } from './ActionDrag.js'
 
@@ -16,7 +18,7 @@ function loop() {
 
 function update() {
   CONTEXT.clearRect(0, 0, CONTEXT.canvas.width, CONTEXT.canvas.height)
-  balls.update()
+  balls.place()
   lines.draw()
   drag.draw()
 }

@@ -8,7 +8,7 @@ class EntityBallList {
       new EntityBall(100)
     ]
   }
-  update() {
+  place() {
     for(let i = 0; i < this.#balls.length; ++i) {
       const ball = this.#balls[i]
       if(!ball.isOnscreen) {
