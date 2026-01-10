@@ -1,11 +1,11 @@
-import { EntityBall } from './EntityBall.js'
+import { EntityBallList } from './EntityBallList.js'
 import { EntityLineList } from './EntityLineList.js'
 import { ActionDrag } from './ActionDrag.js'
 
 const context = document.querySelector('canvas').getContext('2d')
 Object.defineProperty(window, "CONTEXT", { value: context })
 
-const ball = new EntityBall(0)
+const ball = new EntityBallList()
 const lines = new EntityLineList()
 const drag = new ActionDrag(lines)
 
