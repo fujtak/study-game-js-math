@@ -8,9 +8,14 @@ class EntityBallList {
       new EntityBall(100)
     ]
   }
-  draw() {
-    for(const ball of this.#balls) {
-      ball.draw()
+  update() {
+    for(let i = 0; i < this.#balls.length; ++i) {
+      const ball = this.#balls[i]
+      if(!ball.isOnscreen) {
+        this.#balls.splice(i)
+        continue
+      }
+      ball.place()
     }
   }
 }

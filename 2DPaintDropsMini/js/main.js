@@ -5,7 +5,7 @@ import { ActionDrag } from './ActionDrag.js'
 const context = document.querySelector('canvas').getContext('2d')
 Object.defineProperty(window, "CONTEXT", { value: context })
 
-const ball = new EntityBallList()
+const balls = new EntityBallList()
 const lines = new EntityLineList()
 const drag = new ActionDrag(lines)
 
@@ -16,7 +16,7 @@ function loop() {
 
 function update() {
   CONTEXT.clearRect(0, 0, CONTEXT.canvas.width, CONTEXT.canvas.height)
-  ball.draw()
+  balls.update()
   lines.draw()
   drag.draw()
 }

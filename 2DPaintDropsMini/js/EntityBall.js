@@ -32,9 +32,15 @@ class EntityBall {
   get isOnscreen() {
     return this.#isOnscreenX && this.#isOnscreenY
   }
-  draw() {
+  #update() {
     this.#position = new Position(this.#position.x, this.#position.y + this.#speed)
+  }
+  #draw() {
     CONTEXT.drawImage(this.#element, this.#position.x, this.#position.y, this.#size, this.#size)
+  }
+  place() {
+    this.#update()
+    this.#draw()
   }
 }
 
