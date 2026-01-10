@@ -9,7 +9,7 @@ class EntityBall {
     this.#element = document.querySelector('[data-ball]')
     this.#speed = 1
     this.#size = 40
-    this.#position = new Position(x, 0)
+    this.#position = new Position(x, -this.#size)
   }
   get #left() {
     return this.#position.x

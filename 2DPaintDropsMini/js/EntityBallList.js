@@ -1,18 +1,16 @@
-import { EntityBall } from './EntityBall.js'
-
 class EntityBallList {
   #balls
   constructor() {
-    this.#balls = [
-      new EntityBall(0),
-      new EntityBall(100)
-    ]
+    this.#balls = []
+  }
+  push(ball) {
+    this.#balls.push(ball)
   }
   place() {
     for(let i = 0; i < this.#balls.length; ++i) {
       const ball = this.#balls[i]
       if(!ball.isOnscreen) {
-        this.#balls.splice(i)
+        this.#balls.splice(i, 1)
         continue
       }
       ball.place()
