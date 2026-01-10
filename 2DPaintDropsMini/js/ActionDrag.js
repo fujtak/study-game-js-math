@@ -11,7 +11,7 @@ class ActionDrag {
   #addEventListener() {
     CONTEXT.canvas.addEventListener('mousedown', (e) => this.#start(e))
     CONTEXT.canvas.addEventListener('mouseup', () => this.#end())
-    CONTEXT.canvas.addEventListener('mousemove', (e) => this.#update(e))
+    CONTEXT.canvas.addEventListener('mousemove', (e) => this.#calculate(e))
   }
   #start(e) {
     if(this.dragging.isActive) return
@@ -23,7 +23,7 @@ class ActionDrag {
     this.lines.push(this.dragging.line)
     this.dragging.clean()
   }
-  #update(e) {
+  #calculate(e) {
     if(!this.dragging.isActive) return
     const end = new Position(e.offsetX, e.offsetY)
     this.dragging.update(end)
