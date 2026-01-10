@@ -3,7 +3,6 @@ class EntityLine {
     this.start = start
     this.end = end
     this.width = 2
-    console.log('color', color)
     this.color = color ?? 'black'
     Object.freeze(this)
   }
