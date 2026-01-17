@@ -21,6 +21,10 @@ function loop() {
 function update() {
   CONTEXT.clearRect(0, 0, CONTEXT.canvas.width, CONTEXT.canvas.height)
   balls.place()
+  draw()
+}
+
+function draw() {
   lines.draw()
   drag.draw()
 }
