@@ -21,6 +21,11 @@ function loop() {
 function update() {
   CONTEXT.clearRect(0, 0, CONTEXT.canvas.width, CONTEXT.canvas.height)
   balls.place()
+  for(const ball of balls.balls) {
+    for(const line of lines.lines) {
+      console.log('🟢ball', ball, 'x', '✏️line', line)
+    }
+  }
   draw()
 }
 

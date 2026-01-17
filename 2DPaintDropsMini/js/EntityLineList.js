@@ -3,6 +3,9 @@ class EntityLineList {
   constructor() {
     this.#lines = []
   }
+  get lines() {
+    return this.#lines
+  }
   push(line) {
     this.#lines.push(line)
   }

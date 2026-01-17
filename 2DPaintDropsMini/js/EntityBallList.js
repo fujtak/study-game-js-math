@@ -3,6 +3,9 @@ class EntityBallList {
   constructor() {
     this.#balls = []
   }
+  get balls() {
+    return this.#balls
+  }
   push(ball) {
     this.#balls.push(ball)
   }
