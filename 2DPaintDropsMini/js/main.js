@@ -9,7 +9,7 @@ const context = document.querySelector('canvas').getContext('2d')
 Object.defineProperty(window, "CONTEXT", { value: context })
 
 const balls = new EntityBallList()
-const spawner = new SpawnerBall(balls)
+new SpawnerBall(balls)
 const lines = new EntityLineList()
 const drag = new ActionDrag(lines)
 
