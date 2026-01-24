@@ -1,3 +1,4 @@
+import { Point } from "./Point.js"
 import { EntityBall } from './EntityBall.js'
 
 class SpawnerBall {
@@ -11,7 +12,8 @@ class SpawnerBall {
   }
   #spawn() {
     const x = Math.random() * CONTEXT.canvas.width
-    this.#balls.push(new EntityBall(x))
+    const ball = new EntityBall(x)
+    this.#balls.push(ball)
   }
 }
 
