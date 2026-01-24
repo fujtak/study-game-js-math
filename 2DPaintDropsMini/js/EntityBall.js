@@ -32,6 +32,10 @@ class EntityBall {
   get isOnscreen() {
     return this.#isOnscreenX && this.#isOnscreenY
   }
+  get center() {
+    const sizeHalf = this.#size / 2
+    return new Point(this.#point.x + sizeHalf, this.#point.y + sizeHalf)
+  }
   #calculate() {
     this.#point = new Point(this.#point.x, this.#point.y + this.#speed)
   }
