@@ -17,7 +17,7 @@ class EntityBall {
     return new Point(this.#point.x + sizeHalf, this.#point.y + sizeHalf)
   }
   get velocity() {
-    return new Vector(this.#point.x, this.#speed) // 向き: y軸方向, 大きさ: this.#speed
+    return new Vector(0, this.#speed) // 向き: y軸方向, 大きさ: this.#speed
   }
   get isOnscreen() {
     const left = this.#point.x
