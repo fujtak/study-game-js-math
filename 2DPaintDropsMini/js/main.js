@@ -1,16 +1,16 @@
 import { Vector } from './Vector.js'
-import { EntityBallList } from './EntityBallList.js'
 import { EntityLineList } from './EntityLineList.js'
-import { SpawnerBall } from './SpawnerBall.js'
+import { EntityBallList } from './EntityBallList.js'
 import { ActionDrag } from './ActionDrag.js'
+import { SpawnerBall } from './SpawnerBall.js'
 
 const context = document.querySelector('canvas').getContext('2d')
 Object.defineProperty(window, "CONTEXT", { value: context })
 
-const balls = new EntityBallList()
-const spawner = new SpawnerBall(balls)
 const lines = new EntityLineList()
+const balls = new EntityBallList()
 const drag = new ActionDrag(lines)
+const spawner = new SpawnerBall(balls)
 
 function loop() {
   update()
@@ -25,8 +25,8 @@ function update() {
       console.log('vector', vector)
     }
   }
-  balls.place()
   lines.draw()
+  balls.place()
   drag.draw()
 }
 
