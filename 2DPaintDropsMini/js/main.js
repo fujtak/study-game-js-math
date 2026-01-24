@@ -8,7 +8,7 @@ const context = document.querySelector('canvas').getContext('2d')
 Object.defineProperty(window, "CONTEXT", { value: context })
 
 const balls = new EntityBallList()
-new SpawnerBall(balls)
+const spawner = new SpawnerBall(balls)
 const lines = new EntityLineList()
 const drag = new ActionDrag(lines)
 
@@ -22,9 +22,7 @@ function update() {
   balls.place()
   for(const ball of balls.balls) {
     for(const line of lines.lines) {
-      const vectorX = line.end.x - line.start.x
-      const vectorY = line.end.y - line.start.y
-      const vector = new Vector(vectorX, vectorY)
+      const vector = Vector.forEntityLine(line)
       console.log('vector', vector)
     }
   }
