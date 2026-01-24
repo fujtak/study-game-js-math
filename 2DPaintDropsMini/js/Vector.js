@@ -10,7 +10,7 @@ class Vector {
   // 外積
   cross(vector) {
     if(!vector instanceof Vector) return
-    return (this.x * vector.x) - (this.y * vector.y)
+    return (this.x * vector.y) - (this.y * vector.x)
   }
   static forEntityLine(line) {
     if(!line instanceof EntityLine) return
