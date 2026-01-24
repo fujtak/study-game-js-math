@@ -11,13 +11,15 @@ class ColliderForLineBall {
     this.#line = line
     this.#ball = ball
   }
-  get isColliding() {
-    // v0: 円の中心から線の始点へのベクトル
+  get willCollide() {
+    // ballNext: 移動後の円（シミュレート用）
+    const ballNext = this.#ball.nextForSimulation
+    // v0: 移動後の円の中心から線の始点へのベクトル
     const v0 = new Vector(
-      this.#line.start.x - this.#ball.center.x + this.#ball.velocity.x,
-      this.#line.start.y - this.#ball.center.y + this.#ball.velocity.y
+      this.#line.start.x - ballNext.center.x,
+      this.#line.start.y - ballNext.center.y
     )
-    // v1: 円の速度
+    // v1: 移動後の円の速度
     const v1 = this.#ball.velocity
     // v2: 線の始点から終点へのベクトル
     const v2 = Vector.forEntityLine(this.#line)

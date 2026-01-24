@@ -6,10 +6,10 @@ class EntityBall {
   #size
   #point
   #speed
-  constructor(x) {
+  constructor(x, y) {
     this.#element = document.querySelector('[data-ball]')
     this.#size = 40
-    this.#point = new Point(x, -this.#size)
+    this.#point = y ? new Point(x, y) : new Point(x, -this.#size)
     this.#speed = 1
   }
   get center() {
@@ -28,17 +28,24 @@ class EntityBall {
     const isOnscreenY = (0 <= bottom && top <= CONTEXT.canvas.height)
     return isOnscreenX && isOnscreenY
   }
-  #calculate() {
+  get nextForSimulation() {
+    const nextPoint = this.#nextPoint
+    return new EntityBall(nextPoint.x, nextPoint.y)
+  }
+  get #nextPoint() {
     const velocity = this.velocity
     const x = this.#point.x + velocity.x
     const y = this.#point.y + velocity.y
-    this.#point = new Point(x, y)
+    return new Point(x, y)
+  }
+  #update() {
+    this.#point = this.#nextPoint
   }
   #draw() {
     CONTEXT.drawImage(this.#element, this.#point.x, this.#point.y, this.#size, this.#size)
   }
   place() {
-    this.#calculate()
+    this.#update()
     this.#draw()
   }
 }

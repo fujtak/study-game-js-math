@@ -15,7 +15,7 @@ class ColliderForLineBallList {
     for(const ball of this.#balls.balls) {
       for(const line of this.#lines.lines) {
         const colider = new ColliderForLineBall(line, ball)
-        if(colider.isColliding) console.log('💥衝突！')
+        if(colider.willCollide) console.log('💥次のフレームで衝突！')
       }
     }
   }
