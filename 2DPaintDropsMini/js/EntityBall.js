@@ -1,17 +1,23 @@
 import { Point } from "./Point.js"
+import { Vector } from "./Vector.js"
 
 class EntityBall {
   #element
-  #speed
   #size
   #point
+  #speed
   constructor(x) {
     this.#element = document.querySelector('[data-ball]')
-    this.#speed = 1
     this.#size = 40
     this.#point = new Point(x, -this.#size)
     this.#speed = 1
-    this.#velocity = 
+  }
+  get center() {
+    const sizeHalf = this.#size / 2
+    return new Point(this.#point.x + sizeHalf, this.#point.y + sizeHalf)
+  }
+  get velocity() {
+    return new Vector(this.#point.x, this.#speed) // 向き: y軸方向, 大きさ: this.#speed
   }
   get isOnscreen() {
     const left = this.#point.x
@@ -22,12 +28,11 @@ class EntityBall {
     const isOnscreenY = (0 <= bottom && top <= CONTEXT.canvas.height)
     return isOnscreenX && isOnscreenY
   }
-  get center() {
-    const sizeHalf = this.#size / 2
-    return new Point(this.#point.x + sizeHalf, this.#point.y + sizeHalf)
-  }
   #calculate() {
-    this.#point = new Point(this.#point.x, this.#point.y + this.#speed)
+    const velocity = this.velocity
+    const x = this.#point.x + velocity.x
+    const y = this.#point.y + velocity.y
+    this.#point = new Point(x, y)
   }
   #draw() {
     CONTEXT.drawImage(this.#element, this.#point.x, this.#point.y, this.#size, this.#size)
