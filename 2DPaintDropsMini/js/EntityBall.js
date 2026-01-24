@@ -10,27 +10,17 @@ class EntityBall {
     this.#speed = 1
     this.#size = 40
     this.#point = new Point(x, -this.#size)
-  }
-  get #left() {
-    return this.#point.x
-  }
-  get #right() {
-    return this.#point.x + this.#size
-  }
-  get #top() {
-    return this.#point.y
-  }
-  get #bottom() {
-    return this.#point.y + this.#size
-  }
-  get #isOnscreenX() {
-    return 0 <= this.#right && this.#left <= CONTEXT.canvas.width
-  }
-  get #isOnscreenY() {
-    return 0 <= this.#bottom && this.#top <= CONTEXT.canvas.height
+    this.#speed = 1
+    this.#velocity = 
   }
   get isOnscreen() {
-    return this.#isOnscreenX && this.#isOnscreenY
+    const left = this.#point.x
+    const right = this.#point.x + this.#size
+    const top = this.#point.y
+    const bottom = this.#point.y + this.#size
+    const isOnscreenX = (0 <= right && left <= CONTEXT.canvas.width)
+    const isOnscreenY = (0 <= bottom && top <= CONTEXT.canvas.height)
+    return isOnscreenX && isOnscreenY
   }
   get center() {
     const sizeHalf = this.#size / 2
