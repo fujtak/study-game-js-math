@@ -6,6 +6,7 @@ var ShapeCircle = 3;
 var ShapeRectangle = 4;
 var ShapeLine = 5;
 
+// 点ではなくベクトル成分
 function Vec(x, y) {
     this.x = x;
     this.y = y;
@@ -127,12 +128,19 @@ function CircleEntity(x, y, radius, type, restitution, deceleration) {
     }
 
     this.collidedWithLine = function (line) {  // 円と線の衝突
+        // v0: 円の中心から線の始点へのベクトル
         var v0 = new Vec(line.x0 - this.x + this.velocity.x, line.y0 - this.y + this.velocity.y);
+        // v1: 円の速度（単位時間あたりのベクトル）
         var v1 = this.velocity;
+        // v2: 線のベクトル
         var v2 = new Vec(line.x1 - line.x0, line.y1 - line.y0);
+        // cv1v2: v1とv2の外積
         var cv1v2 = v1.cross(v2);
+        // t1: v0とv1の外積 / v1とv2の外積
         var t1 = v0.cross(v1) / cv1v2;
+        // t1: v0とv2の外積 / v1とv2の外積
         var t2 = v0.cross(v2) / cv1v2;
+        // crossed: 衝突するかどうか
         var crossed = (0 <= t1 && t1 <= 1) && (0 <= t2 && t2 <= 1);
 
         if (crossed) {
