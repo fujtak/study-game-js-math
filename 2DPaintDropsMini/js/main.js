@@ -1,8 +1,7 @@
-// Ball
+import { Vector } from './Vector.js'
 import { EntityBallList } from './EntityBallList.js'
-import { SpawnerBall } from './SpawnerBall.js'
-// Line
 import { EntityLineList } from './EntityLineList.js'
+import { SpawnerBall } from './SpawnerBall.js'
 import { ActionDrag } from './ActionDrag.js'
 
 const context = document.querySelector('canvas').getContext('2d')
@@ -23,7 +22,10 @@ function update() {
   balls.place()
   for(const ball of balls.balls) {
     for(const line of lines.lines) {
-      console.log('🟢ball', ball, 'x', '✏️line', line)
+      const vectorX = line.end.x - line.start.x
+      const vectorY = line.end.y - line.start.y
+      const vector = new Vector(vectorX, vectorY)
+      console.log('vector', vector)
     }
   }
   lines.draw()
