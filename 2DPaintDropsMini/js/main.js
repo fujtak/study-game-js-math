@@ -26,10 +26,6 @@ function update() {
       console.log('🟢ball', ball, 'x', '✏️line', line)
     }
   }
-  draw()
-}
-
-function draw() {
   lines.draw()
   drag.draw()
 }
