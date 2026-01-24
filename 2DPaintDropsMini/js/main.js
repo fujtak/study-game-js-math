@@ -19,13 +19,13 @@ function loop() {
 
 function update() {
   CONTEXT.clearRect(0, 0, CONTEXT.canvas.width, CONTEXT.canvas.height)
-  balls.place()
   for(const ball of balls.balls) {
     for(const line of lines.lines) {
       const vector = Vector.forEntityLine(line)
       console.log('vector', vector)
     }
   }
+  balls.place()
   lines.draw()
   drag.draw()
 }
