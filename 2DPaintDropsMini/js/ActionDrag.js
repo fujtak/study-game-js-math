@@ -1,4 +1,4 @@
-import { Position } from "./Position.js"
+import { Point } from "./Point.js"
 import { lineDragger } from "./ActionDragLine.js"
 
 class ActionDrag {
@@ -15,7 +15,7 @@ class ActionDrag {
   }
   #start(e) {
     if(this.dragging.isActive) return
-    const start = new Position(e.offsetX, e.offsetY)
+    const start = new Point(e.offsetX, e.offsetY)
     this.dragging.init(start)
   }
   #end() {
@@ -25,7 +25,7 @@ class ActionDrag {
   }
   #calculate(e) {
     if(!this.dragging.isActive) return
-    const end = new Position(e.offsetX, e.offsetY)
+    const end = new Point(e.offsetX, e.offsetY)
     this.dragging.update(end)
   }
   draw() {
