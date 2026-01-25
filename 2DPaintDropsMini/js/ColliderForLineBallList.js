@@ -11,9 +11,9 @@ class ColliderForLineBallList {
     Object.freeze(this)
   }
   update() {
-    for(const line of this.lines.lines) {
-      for(let i = 0; i < this.balls.balls.length; ++i) {
-        const ball = this.balls.balls[i]
+    for(const line of this.lines.list) {
+      for(let i = 0; i < this.balls.list.length; ++i) {
+        const ball = this.balls.list[i]
         const colider = new ColliderForLineBall(line, ball)
         if(colider.willCollide) {
           const reflection = colider.reflect()

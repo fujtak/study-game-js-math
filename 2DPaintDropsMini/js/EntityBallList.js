@@ -1,23 +1,23 @@
 class EntityBallList {
-  #balls
+  #list
   constructor() {
-    this.#balls = []
+    this.#list = []
   }
-  get balls() {
-    return this.#balls
+  get list() {
+    return this.#list
   }
   #delete(index) {
-    this.#balls.splice(index, 1)
+    this.#list.splice(index, 1)
   }
   push(ball) {
-    this.#balls.push(ball)
+    this.#list.push(ball)
   }
   replace(index, next) {
-    this.#balls[index] = next
+    this.#list[index] = next
   }
   update() {
-    for(let i = 0; i < this.#balls.length; ++i) {
-      const current = this.#balls[i]
+    for(let i = 0; i < this.#list.length; ++i) {
+      const current = this.#list[i]
       if(!current.isOnscreen) {
         this.#delete(i)
         continue
