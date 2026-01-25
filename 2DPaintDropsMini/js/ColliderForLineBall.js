@@ -39,12 +39,10 @@ class ColliderForLineBall {
       this.line.end.x - this.line.start.x,
       this.line.end.y - this.line.start.y
     )
-    // normal: 法線ベクトル
-    const normal = new Vector(tangent.y, -tangent.x)
     // d: 入射ベクトルの法線成分（入射ベクトルと法線の単位ベクトルの内積）
-    const d = incident.dot(normal.unit)
+    const d = incident.dot(tangent.normal.unit)
     // normal2d: dを2倍した法線ベクトル
-    const normal2d = normal.unit.multiply(-2 * d)
+    const normal2d = tangent.normal.unit.multiply(-2 * d)
     // reflection: 反射ベクトル（入射ベクトルとnormal2dの加算）
     const reflection = incident.add(normal2d)
     // ball: 反射後のボール

@@ -16,6 +16,10 @@ class Vector {
   get unit() {
     return this.multiply(1 / this.length)
   }
+  // 法線ベクトル
+  get normal() {
+    return new Vector(this.y, -this.x)
+  }
   // 加算
   add(vector) {
     if(!vector instanceof Vector) return
