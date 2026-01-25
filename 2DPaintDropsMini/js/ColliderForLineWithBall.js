@@ -2,7 +2,7 @@ import { Vector } from './Vector.js'
 import { EntityLine } from "./EntityLine.js"
 import { EntityBall } from "./EntityBall.js"
 
-class ColliderForLineBall {
+class ColliderForLineWithBall {
   constructor(line, ball) {
     if(!line instanceof EntityLine) return
     if(!ball instanceof EntityBall) return
@@ -56,4 +56,4 @@ class ColliderForLineBall {
   }
 }
 
-export { ColliderForLineBall }
+export { ColliderForLineWithBall }

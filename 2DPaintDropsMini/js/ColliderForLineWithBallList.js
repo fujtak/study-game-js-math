@@ -1,8 +1,8 @@
 import { EntityLineList } from "./EntityLineList.js"
 import { EntityBallList } from "./EntityBallList.js"
-import { ColliderForLineBall } from './ColliderForLineBall.js'
+import { ColliderForLineWithBall } from './ColliderForLineWithBall.js'
 
-class ColliderForLineBallList {
+class ColliderForLineWithBallList {
   constructor(lines, balls) {
     if(!lines instanceof EntityLineList) return
     if(!balls instanceof EntityBallList) return
@@ -14,7 +14,7 @@ class ColliderForLineBallList {
     for(const line of this.lines.list) {
       for(let i = 0; i < this.balls.list.length; ++i) {
         const ball = this.balls.list[i]
-        const collider = new ColliderForLineBall(line, ball)
+        const collider = new ColliderForLineWithBall(line, ball)
         const result = collider.process()
         if(!result) continue
         this.balls.replace(i, result)
@@ -23,4 +23,4 @@ class ColliderForLineBallList {
   }
 }
 
-export { ColliderForLineBallList }
+export { ColliderForLineWithBallList }
