@@ -1,7 +1,7 @@
 import { EntityLine } from "./EntityLine.js"
 import { colorSelector } from "./ActionSelectColor.js"
 
-class ActionDragLine {
+class EntityLineDragging {
   #line
   #colorSelector
   constructor() {
@@ -30,6 +30,6 @@ class ActionDragLine {
   }
 }
 
-const lineDragger = new ActionDragLine()
+const lineDragging = new EntityLineDragging()
 
-export { lineDragger }
+export { lineDragging }

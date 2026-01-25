@@ -1,10 +1,10 @@
 import { Point } from "./Point.js"
-import { lineDragger } from "./ActionDragLine.js"
+import { lineDragging } from "./EntityLineDragging.js"
 
 class ActionDrag {
   constructor(lines) {
     this.lines = lines
-    this.dragging = lineDragger
+    this.dragging = lineDragging
     this.#addEventListener()
     Object.freeze(this)
   }
