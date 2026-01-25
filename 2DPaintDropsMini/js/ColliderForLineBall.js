@@ -41,7 +41,7 @@ class ColliderForLineBall {
     )
     // d: 入射ベクトルの法線成分（入射ベクトルと法線の単位ベクトルの内積）
     const d = incident.dot(tangent.normal.unit)
-    // normal2d: dを2倍した法線ベクトル
+    // normal2d: dを-2倍した法線ベクトル
     const normal2d = tangent.normal.unit.multiply(-2 * d)
     // reflection: 反射ベクトル（入射ベクトルとnormal2dの加算）
     const reflection = incident.add(normal2d)
