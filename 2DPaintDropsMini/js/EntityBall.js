@@ -23,13 +23,10 @@ class EntityBall {
     const isOnscreenY = (0 <= bottom && top <= CONTEXT.canvas.height)
     return isOnscreenX && isOnscreenY
   }
-  get #nextPoint() {
+  get next() {
     const x = this.point.x + this.velocity.x
     const y = this.point.y + this.velocity.y
-    return new Point(x, y)
-  }
-  get next() {
-    const point = this.#nextPoint
+    const point = new Point(x, y)
     return new EntityBall(point.x, point.y, this.velocity)
   }
   draw() {
