@@ -9,14 +9,22 @@ class EntityBallList {
   push(ball) {
     this.#balls.push(ball)
   }
-  place() {
+  #delete(index) {
+    this.#balls.splice(index, 1)
+  }
+  #replace(index, next) {
+    this.#balls[index] = next
+  }
+  update() {
     for(let i = 0; i < this.#balls.length; ++i) {
-      const ball = this.#balls[i]
-      if(!ball.isOnscreen) {
-        this.#balls.splice(i, 1)
+      const current = this.#balls[i]
+      if(!current.isOnscreen) {
+        this.#delete(i)
         continue
       }
-      ball.place()
+      const next = current.next
+      this.#replace(i, next)
+      next.draw()
     }
   }
 }

@@ -21,8 +21,8 @@ function loop() {
 function update() {
   CONTEXT.clearRect(0, 0, CONTEXT.canvas.width, CONTEXT.canvas.height)
   colider.update()
+  balls.update()
   lines.draw()
-  balls.place()
   drag.draw()
 }
 

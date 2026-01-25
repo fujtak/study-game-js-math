@@ -13,7 +13,7 @@ class ColliderForLineBall {
   }
   get willCollide() {
     // ballNext: 移動後の円（シミュレート用）
-    const ballNext = this.#ball.nextForSimulation
+    const ballNext = this.#ball.next
     // v0: 移動後の円の中心から線の始点へのベクトル
     const v0 = new Vector(
       this.#line.start.x - ballNext.center.x,
