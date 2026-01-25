@@ -1,4 +1,4 @@
-// 点
+// 座標
 class Point {
   constructor(x, y) {
     this.x = x
