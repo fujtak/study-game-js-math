@@ -11,10 +11,15 @@ class ColliderForLineBallList {
     Object.freeze(this)
   }
   update() {
-    for(const ball of this.balls.balls) {
-      for(const line of this.lines.lines) {
+    for(const line of this.lines.lines) {
+      for(let i = 0; i < this.balls.balls.length; ++i) {
+        const ball = this.balls.balls[i]
         const colider = new ColliderForLineBall(line, ball)
-        if(colider.willCollide) console.log('💥次のフレームで衝突！')
+        if(colider.willCollide) {
+          const reflection = colider.reflect()
+          console.log('💥reflection', reflection)
+          this.balls.replace(i, reflection)
+        }
       }
     }
   }

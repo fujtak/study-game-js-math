@@ -2,19 +2,17 @@ import { Point } from "./Point.js"
 import { Vector } from "./Vector.js"
 
 class EntityBall {
-  constructor(x, y) {
+  constructor(x, y, velocity) {
     this.element = document.querySelector('[data-ball]')
     this.size = 40
     this.point = (y != undefined) ? new Point(x, y) : new Point(x, -this.size)
     this.speed = 1
+    this.velocity = velocity ? velocity : new Vector(0, this.speed)
     Object.freeze(this)
   }
   get center() {
     const sizeHalf = this.size / 2
     return new Point(this.point.x + sizeHalf, this.point.y + sizeHalf)
-  }
-  get velocity() {
-    return new Vector(0, this.speed) // 向き: y軸方向, 大きさ: this.speed
   }
   get isOnscreen() {
     const left = this.point.x
@@ -32,7 +30,7 @@ class EntityBall {
   }
   get next() {
     const point = this.#nextPoint
-    return new EntityBall(point.x, point.y)
+    return new EntityBall(point.x, point.y, this.velocity)
   }
   draw() {
     CONTEXT.drawImage(this.element, this.point.x, this.point.y, this.size, this.size)

@@ -6,13 +6,13 @@ class EntityBallList {
   get balls() {
     return this.#balls
   }
-  push(ball) {
-    this.#balls.push(ball)
-  }
   #delete(index) {
     this.#balls.splice(index, 1)
   }
-  #replace(index, next) {
+  push(ball) {
+    this.#balls.push(ball)
+  }
+  replace(index, next) {
     this.#balls[index] = next
   }
   update() {
@@ -23,7 +23,7 @@ class EntityBallList {
         continue
       }
       const next = current.next
-      this.#replace(i, next)
+      this.replace(i, next)
       next.draw()
     }
   }

@@ -19,7 +19,7 @@ class ColliderForLineBall {
       this.line.start.y - ballNext.center.y
     )
     // v1: 移動後の円の速度
-    const v1 = this.ball.velocity
+    const v1 = ballNext.velocity
     // v2: 線の始点から終点へのベクトル
     const v2 = Vector.forEntityLine(this.line)
     // c: v1とv2の外積
@@ -30,6 +30,26 @@ class ColliderForLineBall {
     const t2 = v0.cross(v2) / c
     // 0 <= t1 <= 1 かつ 0 <= t2 <= 1 ならば衝突
     return (0 <= t1 && t1 <= 1) && (0 <= t2 && t2 <= 1)
+  }
+  reflect() {
+    // incident: 入射ベクトル
+    const incident = this.ball.velocity
+    // tangent: 接線ベクトル
+    const tangent = new Vector(
+      this.line.end.x - this.line.start.x,
+      this.line.end.y - this.line.start.y
+    )
+    // normal: 法線ベクトル
+    const normal = new Vector(tangent.y, -tangent.x)
+    // d: 入射ベクトルの法線成分（入射ベクトルと法線の単位ベクトルの内積）
+    const d = incident.dot(normal.unit)
+    // normal2d: dを2倍した法線ベクトル
+    const normal2d = normal.unit.multiply(-2 * d)
+    // reflection: 反射ベクトル（入射ベクトルとnormal2dの加算）
+    const reflection = incident.add(normal2d)
+    // ball: 反射後のボール
+    const ball = new EntityBall(this.ball.point.x, this.ball.point.y, reflection)
+    return ball
   }
 }
 

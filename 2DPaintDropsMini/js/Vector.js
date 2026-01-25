@@ -7,6 +7,29 @@ class Vector {
     this.y = y
     Object.freeze(this)
   }
+  // 大きさ
+  get length() {
+    // 三平方の定理（a**2 + b**2 = c**2）より導出
+    return Math.sqrt(this.x ** 2 + this.y ** 2)
+  }
+  // 単位ベクトル
+  get unit() {
+    return this.multiply(1 / this.length)
+  }
+  // 加算
+  add(vector) {
+    if(!vector instanceof Vector) return
+    return new Vector(this.x + vector.x, this.y + vector.y)
+  }
+  // 乗算
+  multiply(scalar) {
+    return new Vector(this.x * scalar, this.y * scalar)
+  }
+  // 内積
+  dot(vector) {
+    if(!vector instanceof Vector) return
+    return (this.x * vector.x) + (this.y * vector.y)
+  }
   // 外積
   cross(vector) {
     if(!vector instanceof Vector) return
