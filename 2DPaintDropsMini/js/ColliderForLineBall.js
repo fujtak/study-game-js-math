@@ -10,7 +10,7 @@ class ColliderForLineBall {
     this.ball = ball
     Object.freeze(this)
   }
-  get willCollide() {
+  get #willCollide() {
     // ballNext: 移動後の円（シミュレート用）
     const ballNext = this.ball.next
     // v0: 移動後の円の中心から線の始点へのベクトル
@@ -31,7 +31,7 @@ class ColliderForLineBall {
     // 0 <= t1 <= 1 かつ 0 <= t2 <= 1 ならば衝突
     return (0 <= t1 && t1 <= 1) && (0 <= t2 && t2 <= 1)
   }
-  reflect() {
+  #reflect() {
     // incident: 入射ベクトル
     const incident = this.ball.velocity
     // tangent: 接線ベクトル
@@ -50,6 +50,11 @@ class ColliderForLineBall {
     // ball: 反射後のボール
     const ball = new EntityBall(this.ball.point.x, this.ball.point.y, reflection)
     return ball
+  }
+  process() {
+    if(!this.#willCollide) return
+    const reflection = this.#reflect()
+    return reflection
   }
 }
 

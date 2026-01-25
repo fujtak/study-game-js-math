@@ -14,12 +14,10 @@ class ColliderForLineBallList {
     for(const line of this.lines.list) {
       for(let i = 0; i < this.balls.list.length; ++i) {
         const ball = this.balls.list[i]
-        const colider = new ColliderForLineBall(line, ball)
-        if(colider.willCollide) {
-          const reflection = colider.reflect()
-          console.log('💥reflection', reflection)
-          this.balls.replace(i, reflection)
-        }
+        const collider = new ColliderForLineBall(line, ball)
+        const result = collider.process()
+        if(!result) continue
+        this.balls.replace(i, result)
       }
     }
   }
