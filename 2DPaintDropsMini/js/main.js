@@ -6,6 +6,7 @@ import { ColliderForLineBallList } from './ColliderForLineBallList.js'
 
 const context = document.querySelector('canvas').getContext('2d')
 Object.defineProperty(window, "CONTEXT", { value: context })
+Object.defineProperty(window, "GRAVITY", { value: 0.005 })
 
 const lines = new EntityLineList()
 const balls = new EntityBallList()

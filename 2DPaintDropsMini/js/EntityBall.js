@@ -8,7 +8,6 @@ class EntityBall {
     this.point = (y != undefined) ? new Point(x, y) : new Point(x, -this.size)
     this.speed = 1
     this.maxSpeed = 1
-    this.gravity = 0.005
     this.velocity = velocity ? velocity : new Vector(0, this.speed)
     Object.freeze(this)
   }
@@ -27,7 +26,7 @@ class EntityBall {
   }
   get next() {
     const isAccelingY = (this.velocity.y < this.maxSpeed)
-    const accelY = isAccelingY ? this.gravity : 0
+    const accelY = isAccelingY ? GRAVITY : 0
     const velocity = new Vector(this.velocity.x, this.velocity.y + accelY)
     const x = this.point.x + velocity.x
     const y = this.point.y + velocity.y
