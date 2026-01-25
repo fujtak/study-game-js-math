@@ -9,7 +9,6 @@ class Vector {
   }
   // 大きさ
   get length() {
-    // 三平方の定理（a**2 + b**2 = c**2）より導出
     return Math.sqrt(this.x ** 2 + this.y ** 2)
   }
   // 単位ベクトル
