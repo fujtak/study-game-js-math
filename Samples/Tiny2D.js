@@ -144,10 +144,16 @@ function CircleEntity(x, y, radius, type, restitution, deceleration) {
         var crossed = (0 <= t1 && t1 <= 1) && (0 <= t2 && t2 <= 1);
 
         if (crossed) {
+            // さっき変更した分を戻す（コード設計的には不要な変更はよくない）
             this.move(-this.velocity.x, -this.velocity.y);
-            var dot0 = this.velocity.dot(line.norm);   // 法線と速度の内積
+            // line.norm: 法線の単位ベクトル（法線のnormalだけでなく単位ベクトルのnormalizedも連想できるので命名がわるい）
+            // dot0: 入射ベクトルの法線成分（法線の単位ベクトルと入射ベクトルの内積）
+            var dot0 = this.velocity.dot(line.norm);
+            // vec0: 入射ベクトルの法線成分を2倍した法線ベクトル
             var vec0 = line.norm.mul(-2 * dot0);
+            // 反射ベクトル（入射ベクトルの法線成分を2倍にした法線ベクトルと入射ベクトルの和）
             this.velocity = vec0.add(this.velocity);
+            // 反発係数を掛けた反射ベクトル
             this.velocity = this.velocity.mul(line.restitution * this.restitution);
         }
     }
