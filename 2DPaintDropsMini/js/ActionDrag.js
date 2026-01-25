@@ -28,7 +28,7 @@ class ActionDrag {
     const end = new Point(e.offsetX, e.offsetY)
     this.dragging.update(end)
   }
-  draw() {
+  update() {
     this.dragging.draw()
   }
 }
