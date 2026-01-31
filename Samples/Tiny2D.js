@@ -128,6 +128,7 @@ function CircleEntity(x, y, radius, type, restitution, deceleration) {
     }
 
     this.collidedWithLine = function (line) {  // 円と線の衝突
+        // ⚠️ 円の半径が考慮されていない衝突判定なので衝突時の位置がズレる
         // v0: 円の中心から線の始点へのベクトル
         var v0 = new Vec(line.x0 - this.x + this.velocity.x, line.y0 - this.y + this.velocity.y);
         // v1: 円の速度（単位時間あたりのベクトル）
