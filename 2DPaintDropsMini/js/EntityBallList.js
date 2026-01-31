@@ -6,6 +6,9 @@ class EntityBallList {
   get list() {
     return this.#list
   }
+  get length() {
+    return this.#list.length
+  }
   #delete(index) {
     this.#list.splice(index, 1)
   }

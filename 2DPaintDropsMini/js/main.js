@@ -2,6 +2,7 @@ import { EntityLineList } from './EntityLineList.js'
 import { EntityBallList } from './EntityBallList.js'
 import { ActionDrag } from './ActionDrag.js'
 import { SpawnerBall } from './SpawnerBall.js'
+import { ColliderForBallWithBallList } from './ColliderForBallWithBallList.js'
 import { ColliderForLineWithBallList } from './ColliderForLineWithBallList.js'
 
 const context = document.querySelector('canvas').getContext('2d')
@@ -12,7 +13,8 @@ const lines = new EntityLineList()
 const balls = new EntityBallList()
 const drag = new ActionDrag(lines)
 const spawner = new SpawnerBall(balls)
-const colider = new ColliderForLineWithBallList(lines, balls)
+const colliderForBallWithBallList = new ColliderForBallWithBallList(balls)
+const coliderForLineWithBallList = new ColliderForLineWithBallList(lines, balls)
 
 function loop() {
   update()
@@ -21,7 +23,8 @@ function loop() {
 
 function update() {
   CONTEXT.clearRect(0, 0, CONTEXT.canvas.width, CONTEXT.canvas.height)
-  colider.update()
+  colliderForBallWithBallList.update()
+  coliderForLineWithBallList.update()
   balls.update()
   drag.update()
   lines.draw()
