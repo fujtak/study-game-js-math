@@ -11,6 +11,10 @@ class EntityBall {
     this.velocity = velocity ? velocity : new Vector(0, this.speed)
     Object.freeze(this)
   }
+  get center() {
+    const sizeHalf = this.size / 2
+    return new Point(this.point.x + sizeHalf, this.point.y + sizeHalf)
+  }
   get isOnscreen() {
     const left = this.point.x
     const right = this.point.x + this.size
