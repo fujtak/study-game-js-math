@@ -11,6 +11,9 @@ class EntityBall {
     this.velocity = velocity ? velocity : new Vector(0, this.speed)
     Object.freeze(this)
   }
+  get radius() {
+    return this.size / 2
+  }
   get center() {
     const sizeHalf = this.size / 2
     return new Point(this.point.x + sizeHalf, this.point.y + sizeHalf)
