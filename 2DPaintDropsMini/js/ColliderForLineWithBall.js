@@ -13,23 +13,6 @@ class ColliderForLineWithBall {
   get #willCollide() {
     // ballNext: 移動後の円（シミュレート用）
     const ballNext = this.ball.next
-    // v0: 移動後の円の中心から線の始点へのベクトル
-    const v0 = new Vector(
-      this.line.start.x - ballNext.center.x,
-      this.line.start.y - ballNext.center.y
-    )
-    // v1: 移動後の円の速度
-    const v1 = ballNext.velocity
-    // v2: 線の始点から終点へのベクトル
-    const v2 = Vector.forEntityLine(this.line)
-    // c: v1とv2の外積
-    const c = v1.cross(v2)
-    // t1: v0とv1の外積 / c
-    const t1 = v0.cross(v1) / c
-    // t2: v0とv2の外積 / c
-    const t2 = v0.cross(v2) / c
-    // 0 <= t1 <= 1 かつ 0 <= t2 <= 1 ならば衝突
-    return (0 <= t1 && t1 <= 1) && (0 <= t2 && t2 <= 1)
   }
   #reflect() {
     // incident: 入射ベクトル
