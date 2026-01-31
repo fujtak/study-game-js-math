@@ -24,9 +24,9 @@ class ColliderForLineWithBall {
     const v2 = Vector.forEntityLine(this.line)
     // c: v1とv2の外積
     const c = v1.cross(v2)
-    // t1: v0とv1の外積 / t
+    // t1: v0とv1の外積 / c
     const t1 = v0.cross(v1) / c
-    // t2: v0とv2の外積 / t
+    // t2: v0とv2の外積 / c
     const t2 = v0.cross(v2) / c
     // 0 <= t1 <= 1 かつ 0 <= t2 <= 1 ならば衝突
     return (0 <= t1 && t1 <= 1) && (0 <= t2 && t2 <= 1)
@@ -51,8 +51,8 @@ class ColliderForLineWithBall {
   }
   process() {
     if(!this.#willCollide) return
-    const reflection = this.#reflect()
-    return reflection
+    const ball = this.#reflect()
+    return ball
   }
 }
 
