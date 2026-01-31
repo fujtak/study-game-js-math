@@ -9,11 +9,15 @@ class ColliderForBallWithBallList {
   }
   update() {
     if(this.balls.length <= 1) return
-    for(const ball0 of this.balls.list) {
-      for(const ball1 of this.balls.list) {
+    for(let i0; i0 < this.balls.list.length; ++i0) {
+      const ball0 = this.balls.list[i0]
+      for(let i1; i1 < this.balls.list.length; ++i1) {
+        const ball1 = this.balls.list[i1]
         if(ball0 === ball1) continue
-        const collider = new ColliderForBallWithBall(ball0, ball1)
-        console.log('willCollide', collider.willCollide)
+        const colider = new ColliderForBallWithBall(ball0, ball1)
+        const result = colider.process()
+        if(!result) continue
+        this.balls.replace(i0, result.ball0)
       }
     }
   }
