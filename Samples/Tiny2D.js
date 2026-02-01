@@ -173,30 +173,30 @@ function CircleEntity(x, y, radius, type, restitution, deceleration) {
         }
 
         var distance = Math.sqrt(d2) || 0.01;
-        var overlap = this.radius + peer.radius - distance;
+        // var overlap = this.radius + peer.radius - distance;
 
         var v = new Vec(this.x - peer.x, this.y - peer.y);
         var aNormUnit = v.mul(1 / distance);        // 法線単位ベクトル１
         var bNormUnit = aNormUnit.mul(-1);          // 法線単位ベクトル２
 
         
-        if (this.type == BodyDynamic && peer.type == BodyStatic) {
-            this.move(aNormUnit.x * overlap, aNormUnit.y * overlap);
-            var dot0 = this.velocity.dot(aNormUnit);   // 法線と速度の内積
-            var vec0 = aNormUnit.mul(-2 * dot0);
-            this.velocity = vec0.add(this.velocity);
-            this.velocity = this.velocity.mul(this.restitution);
-        }
-        else if (peer.type == BodyDynamic && this.type == BodyStatic) {
-            peer.move(bNormUnit.x * overlap, bNormUnit.y * overlap);
-            var dot1 = peer.velocity.dot(bNormUnit);   // 法線と速度の内積
-            var vec1 = bNormUnit.mul(-2 * dot1);
-            peer.velocity = vec1.add(peer.velocity);
-            peer.velocity = peer.velocity.mul(peer.restitution);
-        }
-        else {
-            this.move(aNormUnit.x * overlap / 2, aNormUnit.y * overlap / 2);
-            peer.move(bNormUnit.x * overlap / 2, bNormUnit.y * overlap / 2);
+        // if (this.type == BodyDynamic && peer.type == BodyStatic) {
+        //     this.move(aNormUnit.x * overlap, aNormUnit.y * overlap);
+        //     var dot0 = this.velocity.dot(aNormUnit);   // 法線と速度の内積
+        //     var vec0 = aNormUnit.mul(-2 * dot0);
+        //     this.velocity = vec0.add(this.velocity);
+        //     this.velocity = this.velocity.mul(this.restitution);
+        // }
+        // else if (peer.type == BodyDynamic && this.type == BodyStatic) {
+        //     peer.move(bNormUnit.x * overlap, bNormUnit.y * overlap);
+        //     var dot1 = peer.velocity.dot(bNormUnit);   // 法線と速度の内積
+        //     var vec1 = bNormUnit.mul(-2 * dot1);
+        //     peer.velocity = vec1.add(peer.velocity);
+        //     peer.velocity = peer.velocity.mul(peer.restitution);
+        // }
+        // else {
+            // this.move(aNormUnit.x * overlap / 2, aNormUnit.y * overlap / 2);
+            // peer.move(bNormUnit.x * overlap / 2, bNormUnit.y * overlap / 2);
 
             var aTangUnit = new Vec(aNormUnit.y * -1, aNormUnit.x); // 接線ベクトル１
             var bTangUnit = new Vec(bNormUnit.y * -1, bNormUnit.x); // 接線ベクトル２
@@ -206,9 +206,9 @@ function CircleEntity(x, y, radius, type, restitution, deceleration) {
             var bNorm = bNormUnit.mul(bNormUnit.dot(peer.velocity)); // bベクトル法線成分
             var bTang = bTangUnit.mul(bTangUnit.dot(peer.velocity)); // bベクトル接線成分
 
-            this.velocity = new Vec(bNorm.x + aTang.x, bNorm.y + aTang.y);
-            peer.velocity = new Vec(aNorm.x + bTang.x, aNorm.y + bTang.y);
-        }
+            this.velocity = new Vec(bNorm.x + aTang.x, bNorm.y + aTang.y); // 新しい速度1
+            peer.velocity = new Vec(aNorm.x + bTang.x, aNorm.y + bTang.y); // 新しい速度2
+        // }
     }
 }
 
