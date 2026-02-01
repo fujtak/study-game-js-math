@@ -19,12 +19,12 @@ class Vector {
   get normal() {
     return new Vector(this.y, -this.x)
   }
-  // 加算
+  // 合成
   add(vector) {
     if(!vector instanceof Vector) return
     return new Vector(this.x + vector.x, this.y + vector.y)
   }
-  // 乗算
+  // スケール
   multiply(scalar) {
     return new Vector(this.x * scalar, this.y * scalar)
   }

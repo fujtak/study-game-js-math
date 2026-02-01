@@ -23,18 +23,49 @@ class ColliderForBallWithBall {
     return d <= sr
   }
   #reflect() {
-    // reflectionBall0: 反射ベクトル
-    const reflectionBall0 = new Vector(this.ball0.velocity.x, this.ball0.velocity.y)
-    // ball0: 反射後のball0
-    const ball0 = new EntityBall(this.ball0.point.x, this.ball0.point.y, reflectionBall0)
-    // reflectionBall1: 反射ベクトル
-    const reflectionBall1 = new Vector(this.ball1.velocity.x, this.ball1.velocity.y)
-    // ball1: 反射後のball1
-    const ball1 = new EntityBall(this.ball0.point.x, this.ball0.point.y, reflectionBall1)
-    return {
-      ball0,
-      ball1
-    }
+    // normalBase0: ball0からball1方向の法線
+    const normalBase0 = new Vector(
+      this.ball1.center.x - this.ball0.center.x,
+      this.ball1.center.y - this.ball0.center.y
+    )
+    // normalUnit0: normalBase0の単位ベクトル
+    const normalUnit0 = normalBase0.unit
+    // normalScalar0: ball0の法線成分の大きさ
+    const normalScalar0 = normalUnit0.dot(this.ball0.velocity)
+    // normal0: ball0の法線成分
+    const normal0 = normalUnit0.multiply(normalScalar0)
+  
+    // tangentUnit0: ball0の接線の単位ベクトル
+    const tangentUnit0 = normalUnit0.normal
+    // tangentScalar0: ball0の法線成分の大きさ
+    const tangentScalar0 = tangentUnit0.dot(this.ball0.velocity)
+    // tangent0: ball0の法線成分
+    const tangent0 = tangentUnit0.multiply(tangentScalar0)
+   
+    // normalUnit1: ball1からball0方向の法線の単位ベクトル
+    const normalUnit1 = normalUnit0.multiply(-1)
+    // normalScalar1: ball1の法線成分の大きさ
+    const normalScalar1 = normalUnit1.dot(this.ball1.velocity)
+    // normal1: ball1の法線成分
+    const normal1 = normalUnit1.multiply(normalScalar1)
+  
+    // tangentUnit1: ball1の接線の単位ベクトル
+    const tangentUnit1 = normalUnit1.normal
+    // tangentScalar1: ball1の法線成分の大きさ
+    const tangentScalar1 = tangentUnit1.dot(this.ball1.velocity)
+    // tangent1: ball1の法線成分
+    const tangent1 = tangentUnit1.multiply(tangentScalar1)
+
+    // velocity0: 新しいball0の速度ベクトル
+    const velocity0 = tangent0.add(normal1)
+    // velocity1: 新しいball1の速度ベクトル
+    const velocity1 = tangent1.add(normal0)
+    // ball0: 新しいball0
+    const ball0 = new EntityBall(this.ball0.point.x, this.ball0.point.y, velocity0)
+    // ball1: 新しいball1
+    const ball1 = new EntityBall(this.ball1.point.x, this.ball1.point.y, velocity1)
+
+    return { ball0, ball1 }
   }
   process() {
     if(!this.#willCollide) return
