@@ -31,6 +31,9 @@ class ColliderForBallWithBall {
     // normalUnit0: normalBase0の単位ベクトル
     const normalUnit0 = normalBase0.unit
     // normalScalar0: ball0の法線成分の大きさ
+    // ①直角三角形の底辺として捉えると、normalScalar0 = cosθ|this.ball0.velocity->|
+    // ②ベクトルの内積より、this.ball0.velocity->・normalUnit0-> = cosθ|this.ball0.velocity->|
+    // ①②より、normalScalar0 = this.ball0.velocity->・normalUnit0->
     const normalScalar0 = normalUnit0.dot(this.ball0.velocity)
     // normal0: ball0の法線成分
     const normal0 = normalUnit0.multiply(normalScalar0)
@@ -45,6 +48,9 @@ class ColliderForBallWithBall {
     // normalUnit1: ball1からball0方向の法線の単位ベクトル
     const normalUnit1 = normalUnit0.multiply(-1)
     // normalScalar1: ball1の法線成分の大きさ
+    // ①直角三角形の底辺として捉えると、normalScalar1 = cosθ|this.ball1.velocity->|
+    // ②ベクトルの内積より、this.ball1.velocity->・normalUnit1-> = cosθ|this.ball1.velocity->|
+    // ①②より、normalScalar1 = this.ball1.velocity->・normalUnit1->
     const normalScalar1 = normalUnit1.dot(this.ball1.velocity)
     // normal1: ball1の法線成分
     const normal1 = normalUnit1.multiply(normalScalar1)
