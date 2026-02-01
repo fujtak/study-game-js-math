@@ -8,7 +8,6 @@ class ColliderForBallWithBallList {
     Object.freeze(this)
   }
   update() {
-    if(this.balls.length <= 1) return
     for(let i0 = 0; i0 < this.balls.list.length; ++i0) {
       const ball0 = this.balls.list[i0]
       for(let i1 = 0; i1 < this.balls.list.length; ++i1) {
