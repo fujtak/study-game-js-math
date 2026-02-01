@@ -7,7 +7,7 @@ class EntityBall {
     this.size = 40
     this.point = (y != undefined) ? new Point(x, y) : new Point(x, -this.size)
     this.speed = 1
-    this.maxSpeed = 1
+    this.maxSpeed = 1.5
     this.velocity = velocity ? velocity : new Vector(0, this.speed)
     Object.freeze(this)
   }
