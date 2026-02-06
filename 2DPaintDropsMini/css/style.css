@@ -41,3 +41,24 @@ button {
 .p-paintBall {
   display: none;
 }
+
+.p-forSp {
+  text-align: center;
+  margin-top: 1em;
+}
+
+._pc {
+  display: block;
+}
+._sp {
+  display: none;
+}
+
+@media screen and (max-width: 768px) {
+  ._pc {
+    display: none;
+  }
+  ._sp {
+    display: block;
+  }
+}
