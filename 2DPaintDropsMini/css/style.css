@@ -1,31 +1,43 @@
-section {
-  width: 800px;
+* {
+  box-sizing: border-box;
 }
-.p-palette {
+body {
+  margin: 0;
+}
+button {
+  padding: 0;
+  border-width: 1px;
+  background-color: transparent;
+}
+
+.p-paint {
+  position: relative;
+}
+.p-paintPalette {
+  position: absolute;
+  top: 0;
+  left: 0;
   height: 62px;
   display: flex;
   background-image: url('../images/background-palette.png');
   border: 1px solid black;
 }
-button {
-  padding: 0;
+.p-paintPalette-item {
   width: 100%;
   flex-grow: 1;
-  border-width: 1px;
-  background-color: transparent;
 }
-button:nth-of-type(n+1) {
+.p-paintPalette-item:nth-of-type(n+1) {
   border-left: 1px solid black;
 }
-button img {
+.p-paintPalette-item img {
   display: block;
   width: 100%;
   height: 100%;
   object-fit: contain;
 }
-canvas {
+.p-paintCanvas {
   background-image: url('../images/background-canvas.png');
 }
-.ball {
+.p-paintBall {
   display: none;
 }

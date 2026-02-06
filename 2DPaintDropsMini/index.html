@@ -7,20 +7,20 @@
   <link rel="stylesheet" href="./css/style.css">
 </head>
 <body>
-  <section>
-    <div class="p-palette" data-palette>
-      <button data-color="red"><img src="./images/palette-color-red.png"></button>
-      <button data-color="orange"><img src="./images/palette-color-orange.png"></button>
-      <button data-color="yellow"><img src="./images/palette-color-yellow.png"></button>
-      <button data-color="green"><img src="./images/palette-color-green.png"></button>
-      <button data-color="blue"><img src="./images/palette-color-blue.png"></button>
-      <button data-color="purple"><img src="./images/palette-color-purple.png"></button>
-      <button data-color="pink"><img src="./images/palette-color-pink.png"></button>
-      <button data-color="white"><img src="./images/palette-color-white.png"></button>
-      <button data-color="black"><img src="./images/palette-color-black.png"></button>
+  <section class="p-paint">
+    <div class="p-paintPalette" data-palette>
+      <button class="p-paintPalette-item" data-color="red"><img src="./images/palette-color-red.png"></button>
+      <button class="p-paintPalette-item" data-color="orange"><img src="./images/palette-color-orange.png"></button>
+      <button class="p-paintPalette-item" data-color="yellow"><img src="./images/palette-color-yellow.png"></button>
+      <button class="p-paintPalette-item" data-color="green"><img src="./images/palette-color-green.png"></button>
+      <button class="p-paintPalette-item" data-color="blue"><img src="./images/palette-color-blue.png"></button>
+      <button class="p-paintPalette-item" data-color="purple"><img src="./images/palette-color-purple.png"></button>
+      <button class="p-paintPalette-item" data-color="pink"><img src="./images/palette-color-pink.png"></button>
+      <button class="p-paintPalette-item" data-color="white"><img src="./images/palette-color-white.png"></button>
+      <button class="p-paintPalette-item" data-color="black"><img src="./images/palette-color-black.png"></button>
     </div>
-    <canvas width="800" height="500"></canvas>
-    <img src="./images/ball.png" alt="" class="ball" data-ball>
+    <canvas class="p-paintCanvas" width="800" height="500"></canvas>
+    <img class="p-paintBall" src="./images/ball.png" alt="" data-ball>
   </section>
   <script src="./js/main.js" type="module"></script>
 </body>

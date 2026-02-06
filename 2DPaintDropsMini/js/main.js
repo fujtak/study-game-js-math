@@ -1,3 +1,4 @@
+import { ObserverResize } from './ObserverResize.js'
 import { EntityLineList } from './EntityLineList.js'
 import { EntityBallList } from './EntityBallList.js'
 import { ActionDrag } from './ActionDrag.js'
@@ -9,6 +10,7 @@ const context = document.querySelector('canvas').getContext('2d')
 Object.defineProperty(window, "CONTEXT", { value: context })
 Object.defineProperty(window, "GRAVITY", { value: 0.015 })
 
+const observerResize = new ObserverResize()
 const lines = new EntityLineList()
 const balls = new EntityBallList()
 const drag = new ActionDrag(lines)
@@ -22,7 +24,7 @@ function loop() {
 }
 
 function update() {
-  CONTEXT.clearRect(0, 0, CONTEXT.canvas.width, CONTEXT.canvas.height)
+  CONTEXT.clearRect(0, 0, window.CONTEXT.canvas.width, window.CONTEXT.canvas.height)
   colliderForBallWithBallList.update()
   coliderForLineWithBallList.update()
   balls.update()
