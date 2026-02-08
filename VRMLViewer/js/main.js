@@ -7,7 +7,6 @@ function getArrayFromString(keyword) {
   const textPoint = text.substring(positionPointStart + 1, positionPointEnd)
   const points = textPoint.trim().split(/[\s,]+/)
     .map(string => parseFloat(string))
-    .map(number => Number.isInteger(number) ? number : console.error(`Invalid number: ${number}`))
     .filter(number => Number.isInteger(number))
   return points
 }
