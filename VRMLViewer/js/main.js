@@ -1,6 +1,3 @@
-const response = await fetch('/VRMLViewer/wrl/cube.wrl')
-const text = await response.text()
-
 function getArrayFromString(keyword) {
   const positionPoint = text.indexOf(keyword)
   const positionPointStart = text.indexOf('[', positionPoint)
@@ -13,4 +10,6 @@ function getArrayFromString(keyword) {
   return points
 }
 
-console.log('points', getArrayFromString('points'))
+const response = await fetch('/VRMLViewer/wrl/cube.wrl')
+const text = await response.text()
+const points = getArrayFromString('points')
