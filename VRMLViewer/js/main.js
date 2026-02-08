@@ -1,3 +1,5 @@
+import { Vector3D } from './Vector3D.js'
+
 function getArrayFromString(keyword) {
   const positionPoint = text.indexOf(keyword)
   const positionPointStart = text.indexOf('[', positionPoint)
@@ -13,3 +15,7 @@ function getArrayFromString(keyword) {
 const response = await fetch('/VRMLViewer/wrl/cube.wrl')
 const text = await response.text()
 const points = getArrayFromString('points')
+const vertices = points
+  .filter((point, index) => (index % 3 !== 0))
+  .map((point, index) => new Vector3D(points[index], points[index + 1], points[index + 2]))
+console.log('vertices:', vertices)
