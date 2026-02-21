@@ -40,9 +40,8 @@ function paint() {
   for(const point of points) {
     const offsetX = context.canvas.width / 2
     const offsetY = context.canvas.height / 2
-    const pointScaled = point.scale(100)
-    const x = (pointScaled.x) + offsetX
-    const y = (pointScaled.y) + offsetY
+    const x = (point.x) + offsetX
+    const y = (point.y) + offsetY
     const size = 8
     context.fillRect(x, y, size, size)
   }
