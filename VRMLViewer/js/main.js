@@ -1,7 +1,7 @@
 import { Vector3D } from './Vector3D.js'
 
-function getIntegersFromWrl(keyword) {
-  const positionKeyword = text.indexOf(keyword)
+function getIntegersFromWrl() {
+  const positionKeyword = text.indexOf('points')
   const positionStart = text.indexOf('[', positionKeyword)
   const positionEnd = text.indexOf(']', positionKeyword)
   const textArray = text.substring(positionStart + 1, positionEnd)
@@ -13,7 +13,7 @@ function getIntegersFromWrl(keyword) {
 
 const response = await fetch('/VRMLViewer/wrl/cube.wrl')
 const text = await response.text()
-const points = getIntegersFromWrl('points')
+const points = getIntegersFromWrl()
 const vertices = points
   .filter((point, index) => (index % 3 !== 0))
   .map((point, index) => new Vector3D(points[index], points[index + 1], points[index + 2]))
