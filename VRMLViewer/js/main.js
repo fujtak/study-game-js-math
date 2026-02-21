@@ -21,7 +21,17 @@ async function getPoints() {
   return points
 }
 
-const context = document.querySelector('canvas').getContext('2d')
-  
+function paint() {
+  context.fillStyle = 'black'
+  context.fillRect(0, 0, context.canvas.width, context.canvas.height)
+  context.fillStyle = 'white'
+}
+
+function loop() {
+  paint()
+  requestAnimationFrame(loop)
+}
+
+const context = document.querySelector('canvas').getContext('2d')  
 const points = await getPoints()
-console.log('points:', points)
+loop()
