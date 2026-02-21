@@ -25,6 +25,13 @@ function paint() {
   context.fillStyle = 'black'
   context.fillRect(0, 0, context.canvas.width, context.canvas.height)
   context.fillStyle = 'white'
+  for(const point of points) {
+    console.log('point', point)
+    const size = 8
+    const x = point.x
+    const y = point.y
+    context.fillRect(x, y, size, size)
+  }
 }
 
 function loop() {
