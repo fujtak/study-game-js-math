@@ -20,8 +20,16 @@ async function getPoints() {
   const text = await response.text()
   const flat = getPointsFlat(text)
   const points = flat
-    .filter((point, index) => (index % 3 === 0))
-    .map((point, index) => new Vector3D(flat[index], flat[index + 1], flat[index + 2]))
+    .filter((point, index) => {
+      const isPointUnit = (index % 3 === 0)
+      return isPointUnit
+    })
+    .map((point, index) => {
+      const x = flat[index]
+      const y = flat[index + 1]
+      const z = flat[index + 2]
+      return new Vector3D(x, y, z)
+    })
   return points
 }
 
