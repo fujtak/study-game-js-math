@@ -7,7 +7,11 @@ function getPointsFlat(text) {
   const textArray = text.substring(positionStart + 1, positionEnd)
   const flat = textArray.trim().split(/[\s,]+/)
     .map(string => parseFloat(string))
-    .filter(number => Number.isInteger(number))
+    .filter(number => {
+      const isInteger = Number.isInteger(number)
+      if(!isInteger) console.error(`座標値 ${number} は不正です。整数にしてください。`)
+      return isInteger
+    })
   return flat
 }
 
