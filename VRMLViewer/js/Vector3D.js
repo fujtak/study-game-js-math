@@ -5,6 +5,13 @@ class Vector3D {
     this.z = z
     Object.freeze(this)
   }
+  scale(scalar) {
+    return new Vector3D(
+      this.x * scalar,
+      this.y * scalar,
+      this.z * scalar
+    )
+  }
 }
 
 export { Vector3D }
