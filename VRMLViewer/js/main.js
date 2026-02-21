@@ -20,6 +20,8 @@ async function getPoints() {
     .map((point, index) => new Vector3D(flat[index], flat[index + 1], flat[index + 2]))
   return points
 }
+
+const context = document.querySelector('canvas').getContext('2d')
   
 const points = await getPoints()
 console.log('points:', points)
