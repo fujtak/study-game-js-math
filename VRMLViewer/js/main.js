@@ -42,7 +42,7 @@ function paint() {
     const z = point.z + cameraZ
     const scale = 1000
     const x = (point.x * scale / z) + offsetX
-    const y = (point.y * scale / z) + offsetY
+    const y = (-point.y * scale / z) + offsetY
     const size = 8
     context.fillRect(x, y, size, size)
   }
