@@ -1,15 +1,16 @@
 import { Vector3D } from './Vector3D.js'
 
 function getPointsFlat(text) {
-  if(!text.includes('points')) {
+  if(!text.includes('point')) {
     console.error('頂点座標の情報が見当たりません')
     return
   }
-  const positionKeyword = text.indexOf('points')
+  const positionKeyword = text.indexOf('point')
   const positionStart = text.indexOf('[', positionKeyword)
   const positionEnd = text.indexOf(']', positionKeyword)
   const textArray = text.substring(positionStart + 1, positionEnd)
-  const flat = textArray.trim().split(/[\s,]+/)
+  const flat = textArray.trim()
+    .split(/[\s,]+/)
     .map(string => parseFloat(string))
   return flat
 }
