@@ -48,9 +48,8 @@ function paint() {
     const cameraZ = 3
     const z = point.z + cameraZ
     const x = (point.x * scaleForFitScreen / z) + offsetX
-    // 📝memo: y軸を反転させる（VRMLのy軸仕様とcanvasのy軸仕様で正負が逆のため）
-    const y = (-point.y * scaleForFitScreen / z) + offsetY
-    const size = 8
+    const y = (-point.y * scaleForFitScreen / z) + offsetY // y軸を反転させる（VRMLのy軸仕様とcanvasのy軸仕様で正負が逆のため）
+    const size = 6
     context.fillRect(x, y, size, size)
   }
 }
