@@ -38,7 +38,8 @@ function paint() {
   for(const point of points) {
     const offsetX = context.canvas.width / 2
     const offsetY = context.canvas.height / 2
-    const z = point.z
+    const cameraZ = 10
+    const z = point.z + cameraZ
     const scale = 1000
     const x = (point.x * scale / z) + offsetX
     const y = (point.y * scale / z) + offsetY
