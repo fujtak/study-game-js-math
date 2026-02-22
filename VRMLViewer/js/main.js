@@ -18,17 +18,15 @@ async function getPoints() {
   const response = await fetch('/VRMLViewer/wrl/teapot.wrl')
   const text = await response.text()
   const flat = getPointsFlat(text)
-  const points = flat
-    .filter((point, index) => {
-      const isPointUnit = (index % 3 === 0)
-      return isPointUnit
-    })
-    .map((point, index) => {
-      const x = flat[index]
-      const y = flat[index + 1]
-      const z = flat[index + 2]
-      return new Vector3D(x, y, z)
-    })
+  let points = []
+  for(let i = 0; i < flat.length; i+=3) {
+    const x = flat[i]
+    const y = flat[i + 1]
+    const z = flat[i + 2]
+    const vector = new Vector3D(x, y, z)
+    if(vector.isEmpty) break
+    points.push(vector)
+  }
   return points
 }
 
