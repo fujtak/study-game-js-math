@@ -15,7 +15,7 @@ function getPointsFlat(text) {
 }
 
 async function getPoints() {
-  const response = await fetch('/VRMLViewer/wrl/teapot.wrl')
+  const response = await fetch('/VRMLViewer/wrl/triangular-pyramid.wrl')
   const text = await response.text()
   const flat = getPointsFlat(text)
   let points = []
