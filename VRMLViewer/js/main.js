@@ -54,11 +54,6 @@ function paint() {
   }
 }
 
-function loop() {
-  paint()
-  // requestAnimationFrame(loop)
-}
-
 const context = document.querySelector('canvas').getContext('2d')  
 const points = await getPoints()
-loop()
+paint()
