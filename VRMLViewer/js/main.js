@@ -19,7 +19,7 @@ async function getPoints() {
   const response = await fetch('/VRMLViewer/wrl/triangular-pyramid.wrl')
   const text = await response.text()
   const flat = getPointsFlat(text)
-  let points = []
+  const points = []
   for(let i = 0; i < flat.length; i+=3) {
     const x = flat[i]
     const y = flat[i + 1]
