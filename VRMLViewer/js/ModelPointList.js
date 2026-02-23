@@ -31,7 +31,7 @@ class ModelPointList {
       const z = point.z + cameraZ
       const x = (point.x * scaleForFitScreen / z) + offsetX
       const y = (-point.y * scaleForFitScreen / z) + offsetY // y軸を反転させる（VRMLのy軸仕様とcanvasのy軸仕様で正負が逆のため）
-      const size = 6
+      const size = 4
       CONTEXT.fillRect(x, y, size, size)
     }
   }
