@@ -4,9 +4,15 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>VRML Viewer</title>
+  <link rel="stylesheet" href="./css/style.css">
 </head>
 <body>
-  <canvas width="600" height="600"></canvas>
+  <div class="p-listButton">
+    <button data-trigger="pyramid">三角錐</button>
+    <button data-trigger="cube">立方体</button>
+    <button data-trigger="teapot">ティーポット</button>
+  </div>
+  <canvas class="p-canvas" width="600" height="600"></canvas>
   <script src="./js/main.js" type="module"></script>
 </body>
 </html>
