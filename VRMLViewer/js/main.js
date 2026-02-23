@@ -1,40 +1,4 @@
-import { Vector3D } from './Vector3D.js'
-
-async function getVRML() {
-  const response = await fetch('/VRMLViewer/wrl/pyramid.wrl')
-  const text = await response.text()
-  return text
-}
-
-function getPointsFlat(text) {
-  if(!text.includes('point')) {
-    console.error('頂点座標の情報が見当たりません')
-    return
-  }
-  const positionKeyword = text.indexOf('point')
-  const positionStart = text.indexOf('[', positionKeyword)
-  const positionEnd = text.indexOf(']', positionKeyword)
-  const textArray = text.substring(positionStart + 1, positionEnd)
-  const flat = textArray.trim()
-    .split(/[\s,]+/)
-    .map(string => parseFloat(string))
-  return flat
-}
-
-async function getPoints() {
-  const vrml = await getVRML()
-  const flat = getPointsFlat(vrml)
-  const points = []
-  for(let i = 0; i < flat.length; i+=3) {
-    const x = flat[i]
-    const y = flat[i + 1]
-    const z = flat[i + 2]
-    const vector = new Vector3D(x, y, z)
-    if(vector.isEmpty) break
-    points.push(vector)
-  }
-  return points
-}
+import { VRML } from './VRML.js'
 
 function paint() {
   context.fillStyle = 'black'
@@ -60,5 +24,6 @@ function paint() {
 }
 
 const context = document.querySelector('canvas').getContext('2d')  
-const points = await getPoints()
+const pyramid = await VRML.forPyramid()
+const points = pyramid.points
 paint()
