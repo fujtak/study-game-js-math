@@ -4,7 +4,7 @@ function check(value) {
     && !Number.isNaN(value)
 }
 
-class Vector3D {
+class Vector {
   constructor(x, y, z) {
     if(!check(x)) {
       console.error(`不正なx座標: ${x}`)
@@ -27,7 +27,7 @@ class Vector3D {
     return Object.keys(this).length === 0
   }
   scale(scalar) {
-    return new Vector3D(
+    return new Vector(
       this.x * scalar,
       this.y * scalar,
       this.z * scalar
@@ -35,4 +35,4 @@ class Vector3D {
   }
 }
 
-export { Vector3D }
+export { Vector }

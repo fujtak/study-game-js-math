@@ -1,4 +1,4 @@
-import { Vector3D } from './Vector3D.js'
+import { Vector } from './Vector.js'
 import { ModelPointList } from './ModelPointList.js'
 
 class Model {
@@ -18,7 +18,7 @@ class Model {
       const x = flat[i]
       const y = flat[i + 1]
       const z = flat[i + 2]
-      const point = new Vector3D(x, y, z)
+      const point = new Vector(x, y, z)
       if(point.isEmpty) break
       points.push(point)
     }
