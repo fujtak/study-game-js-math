@@ -23,7 +23,9 @@ function paint() {
   }
 }
 
-const context = document.querySelector('canvas').getContext('2d')  
+const context = document.querySelector('canvas').getContext('2d')
+Object.defineProperty(window, 'CONTEXT', { value: context })
+
 const pyramid = await VRML.forPyramid()
 const points = pyramid.points
 paint()
