@@ -1,7 +1,7 @@
 import { Vector3D } from './Vector3D.js'
 
 async function getVRML() {
-  const response = await fetch('/VRMLViewer/wrl/triangular-pyramid.wrl')
+  const response = await fetch('/VRMLViewer/wrl/pyramid.wrl')
   const text = await response.text()
   return text
 }
