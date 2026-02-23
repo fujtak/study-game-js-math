@@ -1,4 +1,4 @@
-import { VRML } from './VRML.js'
+import { Model } from './Model.js'
 
 const context = document.querySelector('canvas').getContext('2d')
 Object.defineProperty(window, 'CONTEXT', { value: context })
@@ -14,7 +14,7 @@ const triggers = document.querySelectorAll('[data-trigger]')
 Array.from(triggers).map(trigger => {
   trigger.addEventListener('click', async() => {
     const id = trigger.dataset.trigger
-    const model = await VRML.for(id)
+    const model = await Model.for(id)
     paint(model)
   })
 })

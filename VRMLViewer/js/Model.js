@@ -1,14 +1,14 @@
 import { Vector3D } from './Vector3D.js'
-import { VRMLPointList } from './VRMLPointList.js'
+import { ModelPointList } from './ModelPointList.js'
 
-class VRML {
+class Model {
   constructor({ text }) {
     if(!text) {
       console.error(`不正なVRMLの文字列: ${text}`)
       return
     }
     this.text = text
-    this.points = new VRMLPointList({ list: this.#points })
+    this.points = new ModelPointList({ list: this.#points })
     Object.freeze(this)
   }
   get #points() {
@@ -44,8 +44,8 @@ class VRML {
   static async for(id) {
     const response = await fetch(`/VRMLViewer/wrl/${id}.wrl`)
     const text = await response.text()
-    return new VRML({ text })
+    return new Model({ text })
   }
 }
 
-export { VRML }
+export { Model }

@@ -1,4 +1,4 @@
-class VRMLPointList {
+class ModelPointList {
   constructor({ list }) {
     if(!Array.isArray(list) || !list.length >= 1) {
       console.error(`不正な頂点座標の配列: ${list}`)
@@ -36,4 +36,4 @@ class VRMLPointList {
   }
 }
 
-export { VRMLPointList }
+export { ModelPointList }
