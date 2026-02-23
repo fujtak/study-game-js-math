@@ -1,5 +1,11 @@
 import { Vector3D } from './Vector3D.js'
 
+async function getVRML() {
+  const response = await fetch('/VRMLViewer/wrl/triangular-pyramid.wrl')
+  const text = await response.text()
+  return text
+}
+
 function getPointsFlat(text) {
   if(!text.includes('point')) {
     console.error('頂点座標の情報が見当たりません')
@@ -16,9 +22,8 @@ function getPointsFlat(text) {
 }
 
 async function getPoints() {
-  const response = await fetch('/VRMLViewer/wrl/triangular-pyramid.wrl')
-  const text = await response.text()
-  const flat = getPointsFlat(text)
+  const vrml = await getVRML()
+  const flat = getPointsFlat(vrml)
   const points = []
   for(let i = 0; i < flat.length; i+=3) {
     const x = flat[i]
