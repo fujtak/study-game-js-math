@@ -26,13 +26,6 @@ class Vector {
   get isEmpty() {
     return Object.keys(this).length === 0
   }
-  scale(scalar) {
-    return new Vector(
-      this.x * scalar,
-      this.y * scalar,
-      this.z * scalar
-    )
-  }
 }
 
 export { Vector }
