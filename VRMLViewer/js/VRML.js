@@ -41,8 +41,8 @@ class VRML {
   paint() {
     this.points.paint()
   }
-  static async forPyramid() {
-    const response = await fetch('/VRMLViewer/wrl/pyramid.wrl')
+  static async for(id) {
+    const response = await fetch(`/VRMLViewer/wrl/${id}.wrl`)
     const text = await response.text()
     return new VRML({ text })
   }

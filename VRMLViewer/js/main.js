@@ -3,7 +3,7 @@ import { VRML } from './VRML.js'
 const context = document.querySelector('canvas').getContext('2d')
 Object.defineProperty(window, 'CONTEXT', { value: context })
 
-const pyramid = await VRML.forPyramid()
+const pyramid = await VRML.for('pyramid')
 
 function paint() {
   context.fillStyle = 'black'
