@@ -42,7 +42,7 @@ class Model {
     this.points.paint()
   }
   static async for(id) {
-    const response = await fetch(`/VRMLViewer/wrl/${id}.wrl`)
+    const response = await fetch(`/study-game-js-math/VRMLViewer/wrl/${id}.wrl`)
     const text = await response.text()
     return new Model({ text })
   }
