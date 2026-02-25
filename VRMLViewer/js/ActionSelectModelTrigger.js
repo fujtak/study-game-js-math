@@ -1,4 +1,4 @@
-import { Model } from './Model.js'
+import { VRML } from './VRML.js'
 import { Viewer } from './Viewer.js'
 
 class ActionSelectModelTrigger {
@@ -8,8 +8,8 @@ class ActionSelectModelTrigger {
   }
   async #onClick() {
     const id = this.element.dataset.triggerId
-    const model = await Model.for(id)
-    const viewer = new Viewer({ model })
+    const vrml = await VRML.for(id)
+    const viewer = new Viewer({ vrml })
     viewer.paint()
   }
   initialize() {

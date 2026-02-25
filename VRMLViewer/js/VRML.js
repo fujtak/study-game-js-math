@@ -1,7 +1,7 @@
 import { Vector } from './Vector.js'
 import { ModelPointList } from './ModelPointList.js'
 
-class Model {
+class VRML {
   constructor({ text }) {
     if(!text) {
       console.error(`不正なVRMLの文字列: ${text}`)
@@ -44,8 +44,8 @@ class Model {
   static async for(id) {
     const response = await fetch(`/study-game-js-math/VRMLViewer/wrl/${id}.wrl`)
     const text = await response.text()
-    return new Model({ text })
+    return new VRML({ text })
   }
 }
 
-export { Model }
+export { VRML }
