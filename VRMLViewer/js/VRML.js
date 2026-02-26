@@ -8,7 +8,7 @@ class VRML {
       return
     }
     this.text = text
-    this.points = new ModelPointList({ list: this.#points })
+    this.model = new ModelPointList({ list: this.#points })
     Object.freeze(this)
   }
   get #points() {
@@ -39,7 +39,7 @@ class VRML {
     return flat
   }
   paint() {
-    this.points.paint()
+    this.model.paint()
   }
   static async for(id) {
     const response = await fetch(`/study-game-js-math/VRMLViewer/wrl/${id}.wrl`)
