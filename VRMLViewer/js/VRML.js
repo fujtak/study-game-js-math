@@ -8,7 +8,7 @@ class VRML {
       return
     }
     this.text = text
-    this.model = new ModelPointList({ list: this.#points })
+    this.model = new ModelPointList({ points: this.#points })
     this.#path
     Object.freeze(this)
   }

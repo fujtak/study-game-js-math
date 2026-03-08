@@ -1,18 +1,18 @@
 class ModelPointList {
-  constructor({ list }) {
-    if(!Array.isArray(list) || !list.length >= 1) {
-      console.error(`不正な頂点座標の配列: ${list}`)
+  constructor({ points }) {
+    if(!Array.isArray(points) || !points.length >= 1) {
+      console.error(`不正な頂点座標の配列: ${points}`)
       return
     }
-    this.list = list
+    this.points = points
     Object.freeze(this)
   }
   get #first() {
-    return this.list[0]
+    return this.points[0]
   }
   get #distanceMax() {
     const first = Math.sqrt(this.#first.x ** 2 + this.#first.y ** 2)
-    const max = this.list.reduce((prev, current) => {
+    const max = this.points.reduce((prev, current) => {
       const distance = Math.sqrt(current.x ** 2 + current.y ** 2)
       return Math.max(prev, distance)
     }, first)
@@ -24,7 +24,7 @@ class ModelPointList {
       CONTEXT.canvas.width / this.#distanceMax,
       CONTEXT.canvas.height / this.#distanceMax
     )
-    for(const point of this.list) {
+    for(const point of this.points) {
       const offsetX = CONTEXT.canvas.width / 2
       const offsetY = CONTEXT.canvas.height / 2
       const cameraZ = 3
