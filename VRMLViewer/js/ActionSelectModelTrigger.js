@@ -9,7 +9,8 @@ class ActionSelectModelTrigger {
   async #onClick() {
     const id = this.element.dataset.triggerId
     const vrml = await VRML.for(id)
-    const viewer = new Viewer({ vrml })
+    const model = vrml.model
+    const viewer = new Viewer({ model })
     viewer.paint()
   }
   initialize() {

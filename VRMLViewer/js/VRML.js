@@ -33,7 +33,6 @@ class VRML {
         return path
       }, [[]])
       .filter(path => path.length > 0)
-    console.log('pathList', pathList)
     return pathList
   }
   #flat(keyword) {
@@ -49,9 +48,6 @@ class VRML {
       .split(/[\s,]+/)
       .map(string => parseFloat(string))
     return flat
-  }
-  paint() {
-    this.model.paint()
   }
   static async for(id) {
     const response = await fetch(`/study-game-js-math/VRMLViewer/wrl/${id}.wrl`)
