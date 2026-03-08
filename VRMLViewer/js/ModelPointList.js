@@ -29,15 +29,20 @@ class ModelPointList {
       CONTEXT.canvas.width / this.#distanceMax,
       CONTEXT.canvas.height / this.#distanceMax
     )
-    for(const point of this.pointList) {
-      const offsetX = CONTEXT.canvas.width / 2
-      const offsetY = CONTEXT.canvas.height / 2
-      const cameraZ = 3
-      const z = point.z + cameraZ
-      const x = (point.x * scaleForFitScreen / z) + offsetX
-      const y = (-point.y * scaleForFitScreen / z) + offsetY // y軸を反転させる（VRMLのy軸仕様とcanvasのy軸仕様で正負が逆のため）
-      const size = 4
-      CONTEXT.fillRect(x, y, size, size)
+    const offsetX = CONTEXT.canvas.width / 2
+    const offsetY = CONTEXT.canvas.height / 2
+    const cameraZ = 3
+    for(const path of this.pathList) {
+      CONTEXT.beginPath()
+      for(let i = 0; i < path.length; ++i) {
+        const index = path[i]
+        const point = this.pointList[index]
+        const z = point.z + cameraZ
+        const x = (point.x * scaleForFitScreen / z) + offsetX
+        const y = (-point.y * scaleForFitScreen / z) + offsetY  // y軸を反転させる（VRMLのy軸仕様とcanvasのy軸仕様で正負が逆のため）
+        i === 0 ? CONTEXT.moveTo(x, y) : CONTEXT.lineTo(x, y)
+      }
+      CONTEXT.stroke()
     }
   }
 }

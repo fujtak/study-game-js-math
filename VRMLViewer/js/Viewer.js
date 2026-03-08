@@ -6,7 +6,7 @@ class Viewer {
   paint() {
     CONTEXT.fillStyle = 'black'
     CONTEXT.fillRect(0, 0, CONTEXT.canvas.width, CONTEXT.canvas.height)
-    CONTEXT.fillStyle = 'white'
+    CONTEXT.strokeStyle = 'white'
     this.vrml.paint()
   }
 }
