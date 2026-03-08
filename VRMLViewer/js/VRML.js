@@ -8,27 +8,33 @@ class VRML {
       return
     }
     this.text = text
-    this.model = new ModelPointList({ points: this.#points })
-    this.#path
+    this.model = new ModelPointList({ pointList: this.#pointList, pathList: this.#pathList })
     Object.freeze(this)
   }
-  get #points() {
+  get #pointList() {
     const flat = this.#flat('point')
-    const points = []
+    const pointList = []
     for(let i = 0; i < flat.length; i+=3) {
       const x = flat[i]
       const y = flat[i + 1]
       const z = flat[i + 2]
       const point = new Vector(x, y, z)
       if(point.isEmpty) break
-      points.push(point)
+      pointList.push(point)
     }
-    return points
+    return pointList
   }
-  get #path() {
+  get #pathList() {
     const flat = this.#flat('coordIndex')
-    console.log('flat', flat)
-    return flat
+    const pathList = flat
+      .reduce((path, current) => {
+        const isSeparator = current === -1
+        isSeparator ? path.push([]) : path.at(-1).push(current)
+        return path
+      }, [[]])
+      .filter(path => path.length > 0)
+    console.log('pathList', pathList)
+    return pathList
   }
   #flat(keyword) {
     if(!this.text.includes(keyword)) {
