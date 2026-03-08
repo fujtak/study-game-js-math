@@ -9,6 +9,7 @@ class VRML {
     }
     this.text = text
     this.model = new ModelPointList({ list: this.#points })
+    this.#path
     Object.freeze(this)
   }
   get #points() {
@@ -24,9 +25,14 @@ class VRML {
     }
     return points
   }
+  get #path() {
+    const flat = this.#flat('coordIndex')
+    console.log('flat', flat)
+    return flat
+  }
   #flat(keyword) {
     if(!this.text.includes(keyword)) {
-      console.error('頂点座標の情報が見当たりません')
+      console.error(`${keyword} の情報が見当たりません`)
       return
     }
     const positionKeyword = this.text.indexOf(keyword)
