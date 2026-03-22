@@ -1,5 +1,5 @@
 import { Vector } from './Vector.js'
-import { ModelPointList } from './ModelPointList.js'
+import { ModelPoints } from './ModelPoints.js'
 
 class VRML {
   constructor({ text }) {
@@ -8,32 +8,32 @@ class VRML {
       return
     }
     this.text = text
-    this.model = new ModelPointList({ pointList: this.#pointList, pathList: this.#pathList })
+    this.model = new ModelPoints({ points: this.#points, path: this.#path })
     Object.freeze(this)
   }
-  get #pointList() {
+  get #points() {
     const flat = this.#flat('point')
-    const pointList = []
+    const points = []
     for(let i = 0; i < flat.length; i+=3) {
       const x = flat[i]
       const y = flat[i + 1]
       const z = flat[i + 2]
       const point = new Vector(x, y, z)
       if(point.isEmpty) break
-      pointList.push(point)
+      points.push(point)
     }
-    return pointList
+    return points
   }
-  get #pathList() {
+  get #path() {
     const flat = this.#flat('coordIndex')
-    const pathList = flat
-      .reduce((path, current) => {
+    const path = flat
+      .reduce((index, current) => {
         const isSeparator = current === -1
-        isSeparator ? path.push([]) : path.at(-1).push(current)
-        return path
+        isSeparator ? index.push([]) : index.at(-1).push(current)
+        return index
       }, [[]])
-      .filter(path => path.length > 0)
-    return pathList
+      .filter(index => index.length > 0)
+    return path
   }
   #flat(keyword) {
     if(!this.text.includes(keyword)) {
