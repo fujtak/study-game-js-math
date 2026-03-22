@@ -11,7 +11,7 @@ class ActionSelectModelTrigger {
     const vrml = await VRML.for(id)
     const model = vrml.model
     const viewer = new Viewer({ model })
-    viewer.paint()
+    viewer.loop()
   }
   initialize() {
     this.element.addEventListener('click', () => this.#onClick())

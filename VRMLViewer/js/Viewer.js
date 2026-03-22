@@ -3,11 +3,15 @@ class Viewer {
     this.model = model
     Object.freeze(this)
   }
-  paint() {
+  #paint() {
     CONTEXT.fillStyle = 'black'
     CONTEXT.fillRect(0, 0, CONTEXT.canvas.width, CONTEXT.canvas.height)
     CONTEXT.strokeStyle = 'white'
     this.model.paint()
+  }
+  loop() {
+    this.#paint()
+    requestAnimationFrame(() => this.loop())
   }
 }
 
