@@ -1,22 +1,11 @@
 export class ModelPoints {
   constructor({ points, path }) {
-    if(!Array.isArray(points) || !points.length >= 1) {
-      console.error(`不正な頂点座標の配列: ${points}`)
-      return
-    }
-    if(!Array.isArray(path) || !path.length >= 1) {
-      console.error(`不正なパスの配列: ${path}`)
-      return
-    }
     this.points = points
     this.path = path
     Object.freeze(this)
   }
-  get #first() {
-    return this.points[0]
-  }
-  get #distanceMax() {
-    const first = Math.sqrt(this.#first.x ** 2 + this.#first.y ** 2)
+  get #size() {
+    const first = Math.sqrt(this.points[0].x ** 2 + this.points[0].y ** 2)
     const max = this.points.reduce((prev, current) => {
       const distance = Math.sqrt(current.x ** 2 + current.y ** 2)
       return Math.max(prev, distance)
@@ -25,8 +14,8 @@ export class ModelPoints {
   }
   paint() {
     const scaleForFitScreen = Math.min(
-      CONTEXT.canvas.width / this.#distanceMax,
-      CONTEXT.canvas.height / this.#distanceMax
+      CONTEXT.canvas.width / this.#size,
+      CONTEXT.canvas.height / this.#size
     )
     const offsetX = CONTEXT.canvas.width / 2
     const offsetY = CONTEXT.canvas.height / 2

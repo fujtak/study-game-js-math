@@ -3,10 +3,6 @@ import { ModelPoints } from './ModelPoints.js'
 
 export class VRML {
   constructor({ text }) {
-    if(!text) {
-      console.error(`不正なVRMLの文字列: ${text}`)
-      return
-    }
     this.text = text
     this.model = new ModelPoints({ points: this.#points, path: this.#path })
     Object.freeze(this)
@@ -36,10 +32,6 @@ export class VRML {
     return path
   }
   #flat(keyword) {
-    if(!this.text.includes(keyword)) {
-      console.error(`${keyword} の情報が見当たりません`)
-      return
-    }
     const positionKeyword = this.text.indexOf(keyword)
     const positionStart = this.text.indexOf('[', positionKeyword)
     const positionEnd = this.text.indexOf(']', positionKeyword)

@@ -1,7 +1,6 @@
 
 export class Matrix {
   constructor(list) {
-    if(!list || !list[0]) return
     this.list = list
     Object.freeze
   }

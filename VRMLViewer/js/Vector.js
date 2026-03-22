@@ -1,25 +1,7 @@
 import { Matrix } from './Matrix.js'; 
 
-function check(value) {
-  return (typeof value === 'number')
-    && Number.isFinite(value)
-    && !Number.isNaN(value)
-}
-
 export class Vector {
   constructor(x, y, z) {
-    if(!check(x)) {
-      console.error(`不正なx座標: ${x}`)
-      return
-    }
-    if(!check(y)) {
-      console.error(`不正なy座標: ${y}`)
-      return
-    }
-    if(!check(z)) {
-      console.error(`不正なz座標: ${z}`)
-      return
-    }
     this.x = x
     this.y = y
     this.z = z
