@@ -4,13 +4,13 @@ const context = document.querySelector('canvas').getContext('2d')
 Object.defineProperty(window, 'CONTEXT', { value: context })
 
 const vrml = await VRML.for('fruit-banana')
-const model = vrml.model
+let model = vrml.model
 
 function paint() {
   context.fillStyle = 'black'
   context.fillRect(0, 0, context.canvas.width, context.canvas.height)
   context.strokeStyle = 'white'
-  model.paint()
+  model = model.paint()
 }
 
 function loop() {
