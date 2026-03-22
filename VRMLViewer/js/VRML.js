@@ -49,8 +49,8 @@ class VRML {
       .map(string => parseFloat(string))
     return flat
   }
-  static async for(id) {
-    const response = await fetch(`/study-game-js-math/VRMLViewer/wrl/${id}.wrl`)
+  static async forBanana() {
+    const response = await fetch('/study-game-js-math/VRMLViewer/wrl/fruit-banana.wrl')
     const text = await response.text()
     return new VRML({ text })
   }

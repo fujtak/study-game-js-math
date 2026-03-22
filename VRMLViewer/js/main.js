@@ -3,7 +3,7 @@ import { VRML } from './VRML.js'
 const context = document.querySelector('canvas').getContext('2d')
 Object.defineProperty(window, 'CONTEXT', { value: context })
 
-const vrml = await VRML.for('fruit-banana')
+const vrml = await VRML.forBanana()
 let model = vrml.model
 
 function paint() {

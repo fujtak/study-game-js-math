@@ -24,7 +24,6 @@ class ModelPointList {
     return max
   }
   paint() {
-    // 🐞bug: モデルによってはスクリーンをはみ出してしまう...
     const scaleForFitScreen = Math.min(
       CONTEXT.canvas.width / this.#distanceMax,
       CONTEXT.canvas.height / this.#distanceMax
