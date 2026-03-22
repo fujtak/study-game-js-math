@@ -37,9 +37,10 @@ class ModelPointList {
       for(let i = 0; i < path.length; ++i) {
         const index = path[i]
         const point = this.pointList[index]
-        const z = point.z + cameraZ
-        const x = (point.x * scaleForFitScreen / z) + offsetX
-        const y = (-point.y * scaleForFitScreen / z) + offsetY  // y軸を反転させる（VRMLのy軸仕様とcanvasのy軸仕様で正負が逆のため）
+        const rotated = point.rotateY()
+        const z = rotated.z + cameraZ
+        const x = (rotated.x * scaleForFitScreen / z) + offsetX
+        const y = (-rotated.y * scaleForFitScreen / z) + offsetY  // y軸を反転させる（VRMLのy軸仕様とcanvasのy軸仕様で正負が逆のため）
         i === 0 ? CONTEXT.moveTo(x, y) : CONTEXT.lineTo(x, y)
       }
       CONTEXT.stroke()
