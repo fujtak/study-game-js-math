@@ -1,4 +1,4 @@
-class ModelPoints {
+export class ModelPoints {
   constructor({ points, path }) {
     if(!Array.isArray(points) || !points.length >= 1) {
       console.error(`不正な頂点座標の配列: ${points}`)
@@ -49,5 +49,3 @@ class ModelPoints {
     return new ModelPoints({ points: pointsRotated , path: this.path })
   }
 }
-
-export { ModelPoints }

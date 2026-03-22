@@ -1,7 +1,7 @@
 import { Vector } from './Vector.js'
 import { ModelPoints } from './ModelPoints.js'
 
-class VRML {
+export class VRML {
   constructor({ text }) {
     if(!text) {
       console.error(`不正なVRMLの文字列: ${text}`)
@@ -55,5 +55,3 @@ class VRML {
     return new VRML({ text })
   }
 }
-
-export { VRML }

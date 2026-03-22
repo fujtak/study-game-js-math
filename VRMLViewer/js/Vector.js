@@ -6,7 +6,7 @@ function check(value) {
     && !Number.isNaN(value)
 }
 
-class Vector {
+export class Vector {
   constructor(x, y, z) {
     if(!check(x)) {
       console.error(`不正なx座標: ${x}`)
@@ -36,5 +36,3 @@ class Vector {
     return new Vector(x, y, z)
   }
 }
-
-export { Vector }
