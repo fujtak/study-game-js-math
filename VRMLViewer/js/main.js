@@ -1,20 +1,14 @@
 import { VRML } from './VRML.js'
+import { Viewer } from './Viewer.js'
 
 const context = document.querySelector('canvas').getContext('2d')
 Object.defineProperty(window, 'CONTEXT', { value: context })
 
 const vrml = await VRML.forBanana()
-let model = vrml.model
-
-function paint() {
-  context.fillStyle = 'black'
-  context.fillRect(0, 0, context.canvas.width, context.canvas.height)
-  context.strokeStyle = 'white'
-  model = model.paint()
-}
+const viewer = new Viewer({ model: vrml.model })
 
 function loop() {
-  paint()
+  viewer.paint()
   requestAnimationFrame(loop)
 }
 
