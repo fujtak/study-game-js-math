@@ -12,6 +12,9 @@ export class ModelPoints {
     }, first)
     return max
   }
+  #rotate() {
+    return this.points.map(point => point.rotateY())
+  }
   paint() {
     const scaleForFitScreen = Math.min(
       CONTEXT.canvas.width / this.#size,
@@ -20,21 +23,19 @@ export class ModelPoints {
     const offsetX = CONTEXT.canvas.width / 2
     const offsetY = CONTEXT.canvas.height / 2
     const cameraZ = 3
-    const pointsRotated = this.points
+    const points = this.#rotate()
     for(const path of this.path) {
       CONTEXT.beginPath()
       for(let i = 0; i < path.length; ++i) {
         const index = path[i]
-        const point = pointsRotated[index]
-        const rotated = point.rotateY()
-        const z = rotated.z + cameraZ
-        const x = (rotated.x * scaleForFitScreen / z) + offsetX
-        const y = (-rotated.y * scaleForFitScreen / z) + offsetY  // y軸を反転させる（VRMLのy軸仕様とcanvasのy軸仕様で正負が逆のため）
-        pointsRotated[index] = rotated
+        const point = points[index]
+        const z = point.z + cameraZ
+        const x = (point.x * scaleForFitScreen / z) + offsetX
+        const y = (-point.y * scaleForFitScreen / z) + offsetY  // y軸を反転させる（VRMLのy軸仕様とcanvasのy軸仕様で正負が逆のため）
         i === 0 ? CONTEXT.moveTo(x, y) : CONTEXT.lineTo(x, y)
       }
       CONTEXT.stroke()
     }
-    return new ModelPoints({ points: pointsRotated , path: this.path })
+    return new ModelPoints({ points: points , path: this.path })
   }
 }
