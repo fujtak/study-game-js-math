@@ -15,8 +15,8 @@ export class DecorationTilePoint {
         const isUp = keyboardPressing.has('ArrowUp');
         const isDown = keyboardPressing.has('ArrowDown');
         const rotated = (isLeft && isRight) ? this.vector
-            : isLeft ? this.vector.rotateHorizontal(1)
-                : isRight ? this.vector.rotateHorizontal(-1)
+            : isLeft ? this.vector.rotateHorizontal(0.6)
+                : isRight ? this.vector.rotateHorizontal(-0.6)
                     : this.vector;
         const moved = (isUp && isDown) ? rotated
             : isUp ? rotated.add(0, 0, -this.speed)
