@@ -8,6 +8,9 @@ export class Vector {
         this.y = y;
         this.z = z;
     }
+    add(x, y, z) {
+        return new Vector(this.x + x, this.y + y, this.z + z);
+    }
     rotateHorizontal(degree) {
         const m = Matrix.forRotateHorizontal(degree);
         const x = m[0] * this.x + m[1] * this.y + m[2] * this.z;

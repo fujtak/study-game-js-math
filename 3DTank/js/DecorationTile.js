@@ -1,6 +1,6 @@
 import { CONTEXT } from "./CONTEXT.js";
 import { Vector } from "./Vector.js";
-import { keyboardPressing } from "./KeyboardPressing.js";
+import { DecorationTilePoint } from "./DecorationTilePoint.js";
 export class DecorationTile {
     static size = 10;
     y;
@@ -8,10 +8,10 @@ export class DecorationTile {
     constructor(x, z) {
         this.y = -5;
         this.points = [
-            new Vector(x, this.y, z),
-            new Vector(x + DecorationTile.size, this.y, z),
-            new Vector(x + DecorationTile.size, this.y, z - DecorationTile.size),
-            new Vector(x, this.y, z - DecorationTile.size),
+            new DecorationTilePoint(new Vector(x, this.y, z)),
+            new DecorationTilePoint(new Vector(x + DecorationTile.size, this.y, z)),
+            new DecorationTilePoint(new Vector(x + DecorationTile.size, this.y, z - DecorationTile.size)),
+            new DecorationTilePoint(new Vector(x, this.y, z - DecorationTile.size)),
         ];
     }
     paint() {
@@ -20,18 +20,14 @@ export class DecorationTile {
         const offsetX = CONTEXT.canvas.width / 2;
         const offsetY = CONTEXT.canvas.height / 2;
         const scale = 1000;
-        const isLeft = keyboardPressing.has('ArrowLeft');
-        const isRight = keyboardPressing.has('ArrowRight');
         for (let i = 0; i < this.points.length; ++i) {
-            this.points[i] = (isLeft && isRight) ? this.points[i]
-                : isLeft ? this.points[i].rotateHorizontal(1)
-                    : isRight ? this.points[i].rotateHorizontal(-1)
-                        : this.points[i];
-            const yOrigin = -(this.points[i].y * scale / this.points[i].z);
-            if (yOrigin < 0)
+            this.points[i] = this.points[i].update();
+            const v = this.points[i].v;
+            if (v.z < 0) {
                 continue;
-            const y = yOrigin + offsetY;
-            const x = (this.points[i].x * scale / this.points[i].z) + offsetX;
+            }
+            const x = (v.x * scale / v.z) + offsetX;
+            const y = -(v.y * scale / v.z) + offsetY;
             if (i === 0) {
                 CONTEXT.moveTo(x, y);
                 continue;
