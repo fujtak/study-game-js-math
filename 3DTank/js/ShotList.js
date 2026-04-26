@@ -12,9 +12,10 @@ class ShotList {
         if (!keyboardPressing.has(spacekey))
             return;
         const interval = 32;
-        if (this.frame % interval > 0)
+        if (interval > this.frame)
             return;
         this.list.push(new Shot());
+        this.frame = 0;
     }
     delete() {
         for (let i = 0; i < this.list.length; ++i) {
