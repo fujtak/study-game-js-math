@@ -1,5 +1,5 @@
 import { keyboardPressing } from "./KeyboardPressing.js";
-export class DecorationTilePoint {
+export class TilePoint {
     vector;
     speed;
     constructor(vector) {
@@ -22,6 +22,6 @@ export class DecorationTilePoint {
             : isUp ? rotated.add(0, 0, -this.speed)
                 : isDown ? rotated.add(0, 0, this.speed)
                     : rotated;
-        return new DecorationTilePoint(moved);
+        return new TilePoint(moved);
     }
 }

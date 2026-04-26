@@ -1,21 +1,22 @@
 import { CONTEXT } from "./CONTEXT.js";
 import { Vector } from "./Vector.js";
-import { DecorationTilePoint } from "./DecorationTilePoint.js";
-export class DecorationTile {
+import { TilePoint } from "./TilePoint.js";
+export class Tile {
     static size = 10;
     y;
     points;
     constructor(x, z) {
         this.y = -5;
         this.points = [
-            new DecorationTilePoint(new Vector(x, this.y, z)),
-            new DecorationTilePoint(new Vector(x + DecorationTile.size, this.y, z)),
-            new DecorationTilePoint(new Vector(x + DecorationTile.size, this.y, z - DecorationTile.size)),
-            new DecorationTilePoint(new Vector(x, this.y, z - DecorationTile.size)),
+            new TilePoint(new Vector(x, this.y, z)),
+            new TilePoint(new Vector(x + Tile.size, this.y, z)),
+            new TilePoint(new Vector(x + Tile.size, this.y, z - Tile.size)),
+            new TilePoint(new Vector(x, this.y, z - Tile.size)),
         ];
     }
     paint() {
         CONTEXT.strokeStyle = 'white';
+        CONTEXT.lineWidth = 1;
         CONTEXT.beginPath();
         const offsetX = CONTEXT.canvas.width / 2;
         const offsetY = CONTEXT.canvas.height / 2;
